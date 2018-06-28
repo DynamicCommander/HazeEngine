@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="VulkanRenderer">
+      <UniqueIdentifier>{02f29e23-b10d-42d1-8cd6-bdae223d7974}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HazeEngine">
+      <UniqueIdentifier>{efd22603-c74d-45a7-8eba-3300215b34ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VulkanRenderer\Shaders">
+      <UniqueIdentifier>{0c7bc27d-abb4-448b-90d1-5271ed93e59a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HazeEngine\Camera">
+      <UniqueIdentifier>{57f4f113-afd0-486f-92d6-9cd18c52bf1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HazeEngine\InputManager">
+      <UniqueIdentifier>{c6f34d02-182c-4c36-975d-6471c1be9126}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HazeEngine\Entity">
+      <UniqueIdentifier>{fc51b002-9ea9-4c90-bde5-c8f6d8d5d492}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HazeEngine\Component">
+      <UniqueIdentifier>{6000b1e2-f11d-4c61-bf8f-cb6b3ef409d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HazeEngine\System">
+      <UniqueIdentifier>{03d530ae-5ccf-438f-9459-c5133ebb93a3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VulkanRenderer.h">
+      <Filter>VulkanRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="HazeEngine.h">
+      <Filter>HazeEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="HazeCam.h">
+      <Filter>HazeEngine\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager.h">
+      <Filter>HazeEngine\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="CSystem.h">
+      <Filter>HazeEngine\System</Filter>
+    </ClInclude>
+    <ClInclude Include="HazeInput.h">
+      <Filter>HazeEngine\InputManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>HazeEngine\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>HazeEngine\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Haze_Functions_STD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>HazeEngine\Component</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VulkanRenderer.cpp">
+      <Filter>VulkanRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="HazeEngine.cpp">
+      <Filter>HazeEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="HazeCam.cpp">
+      <Filter>HazeEngine\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>HazeEngine\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="CSystem.cpp">
+      <Filter>HazeEngine\System</Filter>
+    </ClCompile>
+    <ClCompile Include="HazeInput.cpp">
+      <Filter>HazeEngine\InputManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>HazeEngine\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>HazeEngine\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>HazeEngine\Component</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader.vert">
+      <Filter>VulkanRenderer\Shaders</Filter>
+    </None>
+    <None Include="shader.frag">
+      <Filter>VulkanRenderer\Shaders</Filter>
+    </None>
+    <None Include="compile.bat">
+      <Filter>VulkanRenderer\Shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>
