@@ -33,11 +33,7 @@ namespace Haze_Engine
 		
 		origin = vec3(0.0f, 0.0f, 0.0f);
 
-		position = vec3(0.0f, 0.0f, 3.0f);
-
-		forward = normalize(position - origin);
-		right = normalize(cross(vec3(0.0f, 1.0f, 0.0f), forward));
-		up = cross(forward, right);
+		WorldPosition(vec3(0.0f, 0.0f, 3.0f));
 
 		glfwSetInputMode(hzEngine->GetVulkanRenderer()->GetGLFWWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		SetPerspective();
@@ -50,37 +46,37 @@ namespace Haze_Engine
 
 	void HazeCam::MoveForward()
 	{
-		position += forward * cameraMoveSpeed * deltaTime;
+		Translate(GetForward() * cameraMoveSpeed * deltaTime);
 		UpdateViewMatrix();
 	}
 
 	void HazeCam::MoveBackward()
 	{
-		position -= forward * cameraMoveSpeed * deltaTime;
+		Translate(-GetForward() * cameraMoveSpeed * deltaTime);
 		UpdateViewMatrix();
 	}
 
 	void HazeCam::MoveLeft()
 	{
-		position -= normalize(cross(forward, up)) * cameraMoveSpeed * deltaTime;
+		Translate(normalize(cross(GetForward(), GetUp())) * cameraMoveSpeed * deltaTime);
 		UpdateViewMatrix();
 	}
 
 	void HazeCam::MoveRight() 
 	{
-		position += normalize(cross(forward, up)) * cameraMoveSpeed * deltaTime;
+		Translate(normalize(cross(GetForward(), GetUp())) * cameraMoveSpeed * deltaTime);
 		UpdateViewMatrix();
 	}		 
 
 	void HazeCam::MoveVerticalPos()
 	{
-		position += normalize(vec3(0.0f,1.0f,0.0f)) * cameraMoveSpeed * deltaTime;
+		Translate(normalize(vec3(0.0f, 1.0f, 0.0f)) * cameraMoveSpeed * deltaTime);
 		UpdateViewMatrix();
 	}
 
 	void HazeCam::MoveVerticalNeg()
 	{
-		position -= normalize(vec3(0.0f,1.0f,0.0f)) * cameraMoveSpeed * deltaTime;
+		Translate(normalize(vec3(0.0f, 1.0f, 0.0f)) * cameraMoveSpeed * deltaTime);
 		UpdateViewMatrix();
 	}
 
@@ -92,6 +88,8 @@ namespace Haze_Engine
 
 		clamp(pitch, -89.0f, 89.0f);
 
+		Rotate(yaw, pitch, roll, 0.0f);
+
 		UpdateViewMatrix();
 	}
 
@@ -102,35 +100,6 @@ namespace Haze_Engine
 
 	void HazeCam::UpdateViewMatrix()
 	{
-		forward = CalculateCamFront();
-		right = CalculateCamRight();
-		up = CalculateCamUp();
-
-		viewMatrix = lookAt(position, position + forward, up);
-	}
-
-	vec3 HazeCam::CalculateCamFront()
-	{
-		glm::vec3 camFront;
-		camFront.x = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
-		camFront.y = sin(glm::radians(pitch));
-		camFront.z = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
-		camFront = glm::normalize(camFront);
-
-		return camFront;
-	}
-
-	vec3 HazeCam::CalculateCamRight()
-	{
-		glm::vec3 camRight;
-		camRight = vec3( sin(rotation.y - 3.14 / 2.0f), 0, cos(rotation.y - 3.14f / 2.0f));
-		return camRight;
-	}
-
-	vec3 HazeCam::CalculateCamUp()
-	{
-		glm::vec3 camUp;
-		camUp = cross(right, forward);
-		return camUp;
+		viewMatrix = lookAt(GetWorldPosition(), GetWorldPosition() + GetForward(), GetUp());
 	}
 }

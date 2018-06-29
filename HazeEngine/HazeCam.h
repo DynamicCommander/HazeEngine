@@ -18,13 +18,13 @@ Generic Camera class used for main camera in Haze Engine application
 #include <gtc/matrix_transform.hpp>
 using namespace glm;
 
-#include "Component.h"
+#include "Transform.h"
 
 namespace Haze_Engine
 {
 	class HazeEngine;
 
-	class HazeCam : public ECS::Component
+	class HazeCam : public Transform
 	{
 
 	CLASS_DECLARATION( HazeCam ) 
@@ -51,10 +51,6 @@ namespace Haze_Engine
 		mat4			GetViewMatrix() { return viewMatrix; }												//Builds View Matrix using camera position rotation
 		////////////////////////////////////////HAZE CAMERA ROUTINES//////////////////////////////////////////
 
-		////////////////////////////////////////HAZE CAMERA MEMBERS///////////////////////////////////////////
-		vec3			rotation = vec3();																	//Camera Rotation
-		vec3			position = vec3();																	//Camera Position
-
 		float			cameraMoveSpeed = 3.0f;																//Camera Move Speed
 		////////////////////////////////////////HAZE CAMERA MEMBERS///////////////////////////////////////////
                                                                                   
@@ -67,10 +63,6 @@ namespace Haze_Engine
 
 		mat4			perspectiveMatrix;																	//Matrix built from FOV, Near, and Far planes
 		mat4			viewMatrix;																			//Matrix built from position, rotation
-
-		vec3			forward;																			//Facing direction of camera
-		vec3			right;																				//Right direction of camera
-		vec3			up;																					//Up direction of camera
 
 		float			yaw;																				//Yaw(X) rotation of camera
 		float			pitch;																				//Pitch(Y) rotation of camera
@@ -86,10 +78,6 @@ namespace Haze_Engine
 		////////////////////////////////////////HAZE CAMERA ROUTINES//////////////////////////////////////////
 		void			SetPerspective();																	//Sets Perspective Matrix
 		void			UpdateViewMatrix();																	//Updates View Matrix
-
-		vec3			CalculateCamFront();																//Calculates Camera Forward
-		vec3			CalculateCamRight();																//Calculates Camera Right
-		vec3			CalculateCamUp();																	//Calculates Camera Up
 		////////////////////////////////////////HAZE CAMERA ROUTINES//////////////////////////////////////////
 	};
 }

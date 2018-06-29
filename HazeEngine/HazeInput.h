@@ -17,7 +17,7 @@ namespace Haze_Engine
 {
 	class HazeEngine;
 
-	class HazeInput : CSystem
+	class HazeInput : public CSystem
 	{
 	public:
 		HazeInput();
