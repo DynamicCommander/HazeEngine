@@ -14,15 +14,15 @@
 #### Installation Instructions
 
 1. Download all neccessary software. All of the above is needed for compilation to occur.
-1. Clone Repository into new folder at your desired location
+1. Create Folder on `C:` drive called `CLIENT` inside that folder create another called `HAZE`. We are using this structure straight from the `C:` drive because it creates an absolute path for the includes and linker and any filepaths that the project may need.
+1. Clone Repository into new folder called `HazeEngine` at `C:\CLIENT\HAZE\`
    - ```git status``` to see what files are modified
    - ```git commit ``` to commit changes
    - ```git push origin [branch.name]``` to push changes to repo
-1. Under ```C:\Users\your.name\VisualStudio2017``` create a folder named ``` Libraries ```
+1. Under ```C:\CLIENT\HAZE\HazeEngine\``` create a folder named ``` Libraries ``` if it does not already exist
 1. Visit [<b>[Vulkan Installation Tutorial]</b>](https://vulkan-tutorial.com/Development_environment#page_Windows) and follow instructions for Windows install.
      - This also covers setting up Visual Studio for GLM and GLFW 
      - Make sure to download both parts of GLFW [<b>[http://www.glfw.org/]</b>](http://www.glfw.org/) and [<b>[http://www.glfw.org/download.html]</b>](http://www.glfw.org/download.html), place ```glfw-3.2.1.bin.WIN32``` inside of the ```glfw-3.2.1``` folder
-     - When adding Include Dependencies for GLM extend the path to ```C:\Users\your.name\Documents\Visual Studio 2017\Libraries\glm\glm``` otherwise the #includes won't match in source files
 1. ```F5``` to compile.
 
 #### Known Issues:
