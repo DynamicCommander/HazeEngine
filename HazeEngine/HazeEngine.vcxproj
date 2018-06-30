@@ -23,7 +23,7 @@
     <ProjectGuid>{1166F9BE-37C6-48D2-8CEE-472F3DC633D0}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>HazeEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -90,13 +90,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.1.77.0\Include;C:\Users\dylan.higbee\Documents\Visual Studio 2017\Libraries\glm;C:\Users\dylan.higbee\Documents\Visual Studio 2017\Libraries\glfw-3.2.1\glfw-3.2.1.bin.WIN32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Dylan\Desktop\HazeEngine\Libraries\glfw-3.2.1\glfw-3.2.1.bin.WIN32\include;C:\Users\Dylan\Desktop\HazeEngine\Libraries\glm\glm;C:\Users\Dylan\Desktop\HazeEngine\Libraries\VulkanSDK\1.1.77.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\VulkanSDK\1.1.77.0\Lib32;C:\Users\dylan.higbee\Documents\Visual Studio 2017\Libraries\glfw-3.2.1\glfw-3.2.1.bin.WIN32\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Dylan\Desktop\HazeEngine\Libraries\glfw-3.2.1\glfw-3.2.1.bin.WIN32\lib-vc2015;C:\Users\Dylan\Desktop\HazeEngine\Libraries\VulkanSDK\1.1.77.0\Lib32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -126,14 +126,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.1.77.0\Include;C:\Users\dylan.higbee\Documents\Visual Studio 2017\Libraries\glm;C:\Users\dylan.higbee\Documents\Visual Studio 2017\Libraries\glfw-3.2.1\glfw-3.2.1.bin.WIN32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Dylan\Desktop\HazeEngine\Libraries\glfw-3.2.1\glfw-3.2.1.bin.WIN32\include;C:\Users\Dylan\Desktop\HazeEngine\Libraries\glm\glm;C:\Users\Dylan\Desktop\HazeEngine\Libraries\VulkanSDK\1.1.77.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\VulkanSDK\1.1.77.0\Lib32;C:\Users\dylan.higbee\Documents\Visual Studio 2017\Libraries\glfw-3.2.1\glfw-3.2.1.bin.WIN32\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Dylan\Desktop\HazeEngine\Libraries\glfw-3.2.1\glfw-3.2.1.bin.WIN32\lib-vc2015;C:\Users\Dylan\Desktop\HazeEngine\Libraries\VulkanSDK\1.1.77.0\Lib32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
