@@ -9,6 +9,19 @@ namespace Haze_Engine
 	{
 		parent = nullptr;
 		children = std::vector<Transform*>();
+
+		localPosition = vec3(0.0f, 0.0f, 0.0f);
+		worldPosition = vec3(0.0f, 0.0f, 0.0f);
+
+		localRotation = quat(1.0f, 0.0f, 0.0f, 0.0f);
+		worldRotation = quat(1.0f, 0.0f, 0.0f, 0.0f);
+
+		localScale = vec3(0.0f, 0.0f, 0.0f);
+		worldScale = vec3(0.0f, 0.0f, 0.0f);
+
+		forward = vec3(0.0f, 0.0f, 1.0f);
+		right =	vec3(1.0f, 0.0f, 0.0f);
+		up = vec3(0.0f, 1.0f, 0.0f);
 	}
 
 	Transform::~Transform()
@@ -30,15 +43,13 @@ namespace Haze_Engine
 
 	void Transform::Rotate(quat _rotation)
 	{
-		worldRotation = worldRotation * _rotation;
+		worldRotation = _rotation + worldRotation;
 	}
 
 	void Transform::Rotate(float _x, float _y, float _z, float _w)
 	{
-		worldRotation.x = worldRotation.x * _x;
-		worldRotation.y = worldRotation.y * _y;
-		worldRotation.z = worldRotation.z * _z;
-		worldRotation.w = worldRotation.w * _w;
+		quat toRotation(_w, _x, _y, _z);
+		worldRotation = toRotation + worldRotation;
 	}
 
 	void Transform::Scale(vec3 _scale)
@@ -53,29 +64,28 @@ namespace Haze_Engine
 		worldScale.z += _z;
 	}
 
-	vec3 Transform::CalculateFront()
+	void Transform::CalculateFront()
 	{
-		glm::vec3 camFront;
-		camFront.x = cos(glm::radians(worldRotation.x)) * sin(glm::radians(worldRotation.y));
-		camFront.y = sin(glm::radians(worldRotation.x));
-		camFront.z = cos(glm::radians(worldRotation.x)) * cos(glm::radians(worldRotation.y));
-		camFront = glm::normalize(camFront);
-
-		return camFront;
+		float x = 2.0f * (worldRotation.x * worldRotation.z + worldRotation.w * worldRotation.y);
+		float y = 2.0f * (worldRotation.y * worldRotation.z - worldRotation.w * worldRotation.x);
+		float z = 1.0f - 2.0f * (worldRotation.x * worldRotation.x + worldRotation.y * worldRotation.y);
+		forward = vec3(x, y, z);
 	}
 
-	vec3 Transform::CalculateRight()
+	void Transform::CalculateRight()
 	{
-		glm::vec3 camRight;
-		camRight = vec3(sin(GetWorldRotation().y - 3.14 / 2.0f), 0, cos(GetWorldRotation().y - 3.14f / 2.0f));
-		return camRight;
+		float x = -(1.0f - 2.0f * (worldRotation.y * worldRotation.y + worldRotation.z * worldRotation.z));
+		float y = -(2.0f * (worldRotation.x * worldRotation.y + worldRotation.w * worldRotation.z));
+		float z = -(2.0f *(worldRotation.x * worldRotation.z - worldRotation.w * worldRotation.y));
+		right = vec3(x, y, z);
 	}
 
-	vec3 Transform::CalculateUp()
+	void Transform::CalculateUp()
 	{
-		glm::vec3 camUp;
-		camUp = cross(GetRight(), GetForward());
-		return camUp;
+		float x = 2.0f * (worldRotation.x * worldRotation.y - worldRotation.w * worldRotation.z);
+		float y = 1.0f - 2.0f * (worldRotation.x * worldRotation.z + worldRotation.z * worldRotation.z);
+		float z = 2.0f * (worldRotation.y * worldRotation.z + worldRotation.w * worldRotation.x);
+		up = vec3(x, y, z);
 	}
 
 }

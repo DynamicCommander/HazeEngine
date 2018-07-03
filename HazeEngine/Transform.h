@@ -55,9 +55,9 @@ namespace Haze_Engine
 		void WorldScale(vec3 _worldScale) { worldScale = _worldScale; }
 		void WorldScale(float _x, float _y, float _z) { worldScale = vec3(_x, _y, _z); }
 
-		vec3	CalculateFront();																
-		vec3	CalculateRight();																
-		vec3	CalculateUp();																	
+		void CalculateFront();																
+		void CalculateRight();																
+		void CalculateUp();																	
 
 		vec3 GetForward()	{ CalculateFront(); return forward; }
 		vec3 GetRight()		{ CalculateRight(); return right; }
@@ -66,7 +66,7 @@ namespace Haze_Engine
 		Transform*	GetParent() { return parent; }
 		void		SetParent(Transform* _parent) { parent = _parent; }
 
-	private:
+	protected:
 
 		vec3					localPosition;
 		vec3					worldPosition;
@@ -80,6 +80,8 @@ namespace Haze_Engine
 		vec3					forward;
 		vec3					right;
 		vec3					up;
+
+	private:
 
 		Transform*				parent;
 		std::vector<Transform*> children;

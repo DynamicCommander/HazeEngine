@@ -12,6 +12,8 @@ Generic Camera class used for main camera in Haze Engine application
 #include "HazeEngine.h"
 #include "HazeCam.h"
 
+#include "Haze_Functions_STD.h"
+
 
 namespace Haze_Engine
 {
@@ -42,6 +44,7 @@ namespace Haze_Engine
 	void HazeCam::hzCameraUpdate(float _deltaTime)
 	{
 		deltaTime = _deltaTime;
+		Haze_Functions_STD::console(forward);
 	}
 
 	void HazeCam::MoveForward()
@@ -88,7 +91,7 @@ namespace Haze_Engine
 
 		clamp(pitch, -89.0f, 89.0f);
 
-		Rotate(yaw, pitch, roll, 0.0f);
+		Rotate(yaw, pitch, roll, 1.0f);
 
 		UpdateViewMatrix();
 	}
@@ -100,6 +103,9 @@ namespace Haze_Engine
 
 	void HazeCam::UpdateViewMatrix()
 	{
+		CalculateFront();
+		CalculateRight();
+		CalculateUp();
 		viewMatrix = lookAt(GetWorldPosition(), GetWorldPosition() + GetForward(), GetUp());
 	}
 }
