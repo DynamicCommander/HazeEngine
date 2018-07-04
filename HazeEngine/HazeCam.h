@@ -10,13 +10,10 @@ Generic Camera class used for main camera in Haze Engine application
 <Haze Cam Class Declaration>
 */
 
+#include "Haze_Functions_STD.h"
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 
-#include <glm.hpp>
-#include <gtc/quaternion.hpp>
-#include <gtc/matrix_transform.hpp>
-using namespace glm;
 
 #include "Transform.h"
 
@@ -51,7 +48,8 @@ namespace Haze_Engine
 		mat4			GetViewMatrix() { return viewMatrix; }												//Builds View Matrix using camera position rotation
 		////////////////////////////////////////HAZE CAMERA ROUTINES//////////////////////////////////////////
 
-		float			cameraMoveSpeed = 3.0f;																//Camera Move Speed
+		////////////////////////////////////////HAZE CAMERA MEMBERS///////////////////////////////////////////
+		float			cameraMoveSpeed = 3.0f;															//Camera Move Speed
 		////////////////////////////////////////HAZE CAMERA MEMBERS///////////////////////////////////////////
                                                                                   
 	private:
@@ -63,10 +61,6 @@ namespace Haze_Engine
 
 		mat4			perspectiveMatrix;																	//Matrix built from FOV, Near, and Far planes
 		mat4			viewMatrix;																			//Matrix built from position, rotation
-
-		float			yaw;																				//Yaw(X) rotation of camera
-		float			pitch;																				//Pitch(Y) rotation of camera
-		float			roll;																				//Roll(Z) rotation of camera
 
 		float			fieldOfView = 60.0f;																//FOV
 		float			zNear = .01f;																		//Near clipping plane distance

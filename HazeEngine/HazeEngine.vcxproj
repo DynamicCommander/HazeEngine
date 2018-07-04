@@ -90,7 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\CLIENT\HAZE\HazeEngine\Libraries\glfw-3.2.1\glfw-3.2.1.bin.WIN32\include;C:\CLIENT\HAZE\HazeEngine\Libraries\VulkanSDK\1.1.77.0\Include;C:\CLIENT\HAZE\HazeEngine\Libraries\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\CLIENT\HAZE\HazeEngine\Libraries\glfw-3.2.1\glfw-3.2.1.bin.WIN32\include;C:\CLIENT\HAZE\HazeEngine\Libraries\glm;C:\CLIENT\HAZE\HazeEngine\Libraries\VulkanSDK\1.1.77.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

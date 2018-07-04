@@ -4,10 +4,7 @@
 
 #include "Component.h"
 
-#include <glm.hpp>
-#include <gtc\matrix_transform.hpp>
-#include <gtc\quaternion.hpp>
-using namespace glm;
+#include "Haze_Functions_STD.h"
 
 #include <vector>
 
@@ -25,7 +22,7 @@ namespace Haze_Engine
 		void Translate(vec3 _direction);
 		void Translate(float _x, float _y, float _z);
 
-		void Rotate(quat _rotation);
+		void Rotate(vec3 _rotation, float _angle);
 		void Rotate(float _x, float _y, float _z, float _w);
 
 		void Scale(vec3 _scale);
@@ -80,6 +77,10 @@ namespace Haze_Engine
 		vec3					forward;
 		vec3					right;
 		vec3					up;
+
+		float			yaw;
+		float			pitch;
+		float			roll;
 
 	private:
 

@@ -8,10 +8,10 @@
 Generic Input class for Haze Engine
 <Haze Input Class Declaration>
 */
-
-#include <glm.hpp>
 #include "stdafx.h"
 #include "CSystem.h"
+
+#include "Haze_Functions_STD.h"
 
 namespace Haze_Engine
 {
@@ -40,10 +40,10 @@ namespace Haze_Engine
 		////////////////////////////////////////HAZE INPUT MEMBERS///////////////////////////////////////////
 		Haze_Engine::HazeEngine *	hzEngine;																//Haze Engine Reference
 
-		float						mouseXSensitivity = 3.0f;												//Mouse X Speed
-		float						mouseYSensitivity = 3.0f;												//Mouse Y Speed
+		float						mouseXSensitivity = 0.003f;												//Mouse X Speed
+		float						mouseYSensitivity = 0.003f;												//Mouse Y Speed
 
-		glm::vec2					oldMousePosition;														//Old mouse position, used to calculate new offset
+		vec2						oldMousePosition;														//Old mouse position, used to calculate new offset
 
 		bool						bufferFirstMouse = true;												//Buffer first mouse input
 		////////////////////////////////////////HAZE INPUT MEMBERS///////////////////////////////////////////

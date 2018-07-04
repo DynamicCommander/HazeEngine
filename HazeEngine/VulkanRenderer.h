@@ -14,9 +14,7 @@
 #include "stdafx.h"
 #include "CSystem.h"
 
-#include <glm.hpp>
-#include <gtc\matrix_transform.hpp>
-using namespace glm;
+#include "Haze_Functions_STD.h"
 
 #include <vector>
 #include <array>
