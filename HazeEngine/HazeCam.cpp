@@ -18,7 +18,7 @@ namespace Haze_Engine
 {
 	CLASS_DEFINITION(Component, HazeCam)
 
-	HazeCam::HazeCam()
+		HazeCam::HazeCam()
 	{
 		this->viewMatrix = mat4();
 		this->perspectiveMatrix = mat4();
@@ -31,10 +31,10 @@ namespace Haze_Engine
 	void HazeCam::hzCameraInit(HazeEngine* _hzEngine)
 	{
 		hzEngine = _hzEngine;
-		
+
 		origin = vec3(0.0f, 0.0f, 0.0f);
 
-		WorldPosition(vec3(0.0f, 0.0f, -3.0f));
+		WorldPosition(vec3(0.0f, 0.0f, 3.0f));
 
 		glfwSetInputMode(hzEngine->GetVulkanRenderer()->GetGLFWWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		SetPerspective();
@@ -43,8 +43,6 @@ namespace Haze_Engine
 	void HazeCam::hzCameraUpdate(float _deltaTime)
 	{
 		deltaTime = _deltaTime;
-
-		Haze_Functions_STD::console(forward);
 
 		UpdateViewMatrix();
 	}
@@ -61,22 +59,22 @@ namespace Haze_Engine
 
 	void HazeCam::MoveLeft()
 	{
-		Translate(-normalize(cross(GetForward(), GetUp())) * cameraMoveSpeed * deltaTime);
+		Translate(-normalize(GetRight() * cameraMoveSpeed * deltaTime));
 	}
 
-	void HazeCam::MoveRight() 
+	void HazeCam::MoveRight()
 	{
-		Translate(normalize(cross(GetForward(), GetUp())) * cameraMoveSpeed * deltaTime);
-	}		 
+		Translate(normalize(GetRight() * cameraMoveSpeed * deltaTime));
+	}
 
 	void HazeCam::MoveVerticalPos()
 	{
-		Translate(normalize(vec3(0.0f, 1.0f, 0.0f)) * cameraMoveSpeed * deltaTime);
+		Translate(vec3(0.0f, 1.0f, 0.0f) * cameraMoveSpeed * deltaTime);
 	}
 
 	void HazeCam::MoveVerticalNeg()
 	{
-		Translate(-normalize(vec3(0.0f, 1.0f, 0.0f)) * cameraMoveSpeed * deltaTime);
+		Translate(vec3(0.0f, -1.0f, 0.0f) * cameraMoveSpeed * deltaTime);
 	}
 
 	void HazeCam::YawPitchRoll(float _yawRadians, float _pitchRadians, float _rollRadians)
@@ -87,9 +85,7 @@ namespace Haze_Engine
 
 		clamp(pitch, -89.0f, 89.0f);
 
-		Rotate(GetRight(), yaw);
-		Rotate(GetUp(), pitch);
-		Rotate(GetForward(), roll);
+		Rotate(yaw, pitch, roll);
 	}
 
 	void HazeCam::SetPerspective()
@@ -102,3 +98,4 @@ namespace Haze_Engine
 		viewMatrix = lookAt(GetWorldPosition(), GetWorldPosition() + GetForward(), GetUp());
 	}
 
+}

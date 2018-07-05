@@ -22,8 +22,8 @@ namespace Haze_Engine
 		void Translate(vec3 _direction);
 		void Translate(float _x, float _y, float _z);
 
-		void Rotate(vec3 _rotation, float _angle);
-		void Rotate(float _x, float _y, float _z, float _w);
+		void Rotate(vec3 _rotation);
+		void Rotate(float _x, float _y, float _z);
 
 		void Scale(vec3 _scale);
 		void Scale(float _x, float _y, float _z);
@@ -36,13 +36,13 @@ namespace Haze_Engine
 		void WorldPosition(vec3 _worldPosition) { worldPosition = _worldPosition; }
 		void WorldPosition(float _x, float _y, float _z) { worldPosition = vec3(_x, _y, _z); }
 		
-		quat GetLocalRotation()	{ return localRotation; }
-		quat GetWorldRotation() { return worldRotation; }
+		quat GetLocalRotation()	{ return quat(localRotation); }
+		quat GetWorldRotation() { return quat(worldRotation); }
 
-		void LocalRotation(quat _localRotation) { localRotation = _localRotation; }
-		void LocalRotation(float _x, float _y, float _z, float _w) { localRotation = quat(_x, _y, _z, _w); }
-		void WorldRotation(quat _worldRotation) { worldRotation = _worldRotation; }
-		void WorldRotation(float _x, float _y, float _z, float _w) { worldRotation = quat(_x, _y, _z, _w); }
+		void LocalRotation(vec3 _localRotation) { localRotation = _localRotation; }
+		void LocalRotation(float _x, float _y, float _z, float _w) { localRotation = vec3(_x, _y, _z); }
+		void WorldRotation(vec3 _worldRotation) { worldRotation = _worldRotation; }
+		void WorldRotation(float _x, float _y, float _z, float _w) { worldRotation = vec3(_x, _y, _z); }
 
 		vec3 GetLocalScale()	{ return localScale; }
 		vec3 GetWorldScale()	{ return worldScale; }
@@ -65,22 +65,22 @@ namespace Haze_Engine
 
 	protected:
 
-		vec3					localPosition;
-		vec3					worldPosition;
+		vec3 localPosition;
+		vec3 worldPosition;
+			 
+		vec3 localRotation;
+		vec3 worldRotation;
+			 
+		vec3 localScale;
+		vec3 worldScale;
+			 
+		vec3 forward;
+		vec3 right;
+		vec3 up;
 
-		quat					localRotation;
-		quat					worldRotation;
-
-		vec3					localScale;
-		vec3					worldScale;
-
-		vec3					forward;
-		vec3					right;
-		vec3					up;
-
-		float			yaw;
-		float			pitch;
-		float			roll;
+		float yaw;
+		float pitch;
+		float roll;
 
 	private:
 
