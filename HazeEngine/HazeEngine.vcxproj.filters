@@ -37,6 +37,9 @@
     <Filter Include="HazeEngine\System">
       <UniqueIdentifier>{03d530ae-5ccf-438f-9459-c5133ebb93a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HazeEngine\Model">
+      <UniqueIdentifier>{6ccf2a12-6b00-44a7-b4d9-9e3bcfe6b830}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -75,6 +78,15 @@
     <ClInclude Include="Transform.h">
       <Filter>HazeEngine\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>HazeEngine\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>HazeEngine\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="VkVertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -106,6 +118,15 @@
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>HazeEngine\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>HazeEngine\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertex.cpp">
+      <Filter>HazeEngine\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="VkVertex.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

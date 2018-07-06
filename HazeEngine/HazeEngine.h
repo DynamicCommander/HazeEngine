@@ -27,6 +27,10 @@ using namespace ECS;
 #include <time.h>
 #include <set>
 
+static Haze_Engine::HazeEngine* hazeEngine;
+
+enum Active_Renderer {DIRECTX, VULKAN, OPENGL};
+
 namespace Haze_Engine
 {
 	class HazeEngine
@@ -56,8 +60,11 @@ namespace Haze_Engine
 		void						HazeInit();																//Initialization of Haze Engine, creates all systems.
 		void						HazeUpdate();															//Update of Haze Engine, calculates dt then passes it to all object updates.
 
-		template <typename T>
+		template <class T>
 		T*							CreateSystem();
+
+		template <class T>
+		T*							FindSystemByType(T _system);
 
 		const bool					IsShutDown() { return shutDown; }										//Status of Engine
 		////////////////////////////////////////HAZE ENGINE ROUTINES//////////////////////////////////////////

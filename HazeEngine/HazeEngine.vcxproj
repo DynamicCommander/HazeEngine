@@ -167,9 +167,12 @@
     <ClInclude Include="HazeEngine.h" />
     <ClInclude Include="Haze_Functions_STD.h" />
     <ClInclude Include="HazeInput.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="Vertex.h" />
+    <ClInclude Include="VkVertex.h" />
     <ClInclude Include="VulkanRenderer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +183,7 @@
     <ClCompile Include="HazeCam.cpp" />
     <ClCompile Include="HazeEngine.cpp" />
     <ClCompile Include="HazeInput.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -187,6 +191,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="Vertex.cpp" />
+    <ClCompile Include="VkVertex.cpp" />
     <ClCompile Include="VulkanRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>

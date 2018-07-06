@@ -61,4 +61,6 @@ namespace ECS
 		std::map<Entity_ID, Entity*>::iterator iter = entities.find(_id);
 		return iter->second;
 	}
+
+
 }

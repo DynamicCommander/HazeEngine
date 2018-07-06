@@ -16,13 +16,7 @@ Generic Camera class used for main camera in Haze Engine application
 
 namespace Haze_Engine
 {
-	CLASS_DEFINITION(Component, HazeCam)
-
-		HazeCam::HazeCam()
-	{
-		this->viewMatrix = mat4();
-		this->perspectiveMatrix = mat4();
-	}
+	CLASS_DEFINITION(Transform, HazeCam)
 
 	HazeCam::~HazeCam()
 	{
@@ -79,8 +73,8 @@ namespace Haze_Engine
 
 	void HazeCam::YawPitchRoll(float _yawRadians, float _pitchRadians, float _rollRadians)
 	{
-		yaw += _yawRadians * hzEngine->GetInput()->GetMouseXSensitivity();
-		pitch += _pitchRadians * hzEngine->GetInput()->GetMouseYSensitivity();
+		yaw += _yawRadians * hzEngine->GetInput()->GetMouseXSensitivity() * deltaTime;
+		pitch += _pitchRadians * hzEngine->GetInput()->GetMouseYSensitivity() * deltaTime;
 		roll += _rollRadians;
 
 		clamp(pitch, -89.0f, 89.0f);
@@ -95,7 +89,8 @@ namespace Haze_Engine
 
 	void HazeCam::UpdateViewMatrix()
 	{
-		viewMatrix = lookAt(GetWorldPosition(), GetWorldPosition() + GetForward(), GetUp());
+		//viewMatrix = lookAt(GetWorldPosition(), GetWorldPosition() + GetForward(), GetUp());
+		viewMatrix = translationMatrix * rotationMatrix;
 	}
 
 }

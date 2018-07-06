@@ -12,7 +12,9 @@
 #pragma once
 
 #include "stdafx.h"
+
 #include "CSystem.h"
+#include "VkVertex.h"
 
 #include "Haze_Functions_STD.h"
 
@@ -38,38 +40,6 @@ namespace Vulkan_Renderer
 		VkSurfaceCapabilitiesKHR		capabilities;
 		std::vector<VkSurfaceFormatKHR> formats;
 		std::vector<VkPresentModeKHR>	presentModes;
-	};
-
-	struct Vertex
-	{
-		vec3 v_pos;
-		vec3 v_color;
-
-		static VkVertexInputBindingDescription GetBindingDescription()
-		{
-			VkVertexInputBindingDescription bindingDescription = {};
-			bindingDescription.binding = 0;
-			bindingDescription.stride = sizeof(Vertex);
-			bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-			return bindingDescription;
-		}
-
-		static std::array<VkVertexInputAttributeDescription, 2> GetAttributeDescriptions()
-		{
-			std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions = {};
-
-			attributeDescriptions[0].binding = 0;
-			attributeDescriptions[0].location = 0;
-			attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-			attributeDescriptions[0].offset = offsetof(Vertex, v_pos);
-
-			attributeDescriptions[1].binding = 0;
-			attributeDescriptions[1].location = 1;
-			attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-			attributeDescriptions[1].offset = offsetof(Vertex, v_color);
-
-			return attributeDescriptions;
-		}
 	};
 
 	struct UniformBufferObject
@@ -104,7 +74,7 @@ namespace Vulkan_Renderer
 		//	{ { -0.5f, 0.5f },{ 0.0f, 0.0f, 1.0f } }
 		//};
 
-		const std::vector<Vertex> vertices =
+		const std::vector<VkVertex> vertices =
 		{
 			{ {-1.0f, -1.0f, -1.0f}	,{1.0f, 0.0f, 0.0f} },
 			{ {1.0f, -1.0f, -1.0f}	,{0.0f, 1.0f, 0.0f} },
@@ -114,8 +84,8 @@ namespace Vulkan_Renderer
 			{ {1.0f, -1.0f, 1.0f}	,{0.0f, 1.0f, 0.0f} },
 			{ {1.0f, 1.0f, 1.0f}	,{0.0f, 0.0f, 1.0f} },
 			{ {-1.0f, 1.0f, 1.0f}	,{1.0f, 1.0f, 1.0f} }
-		};	//Temporary Triangle
-
+		};
+		
 		const std::vector<uint16_t> indices =
 		{
 			0, 1, 3, 3, 1, 2,
@@ -181,6 +151,7 @@ namespace Vulkan_Renderer
 		VkDeviceMemory				vkUniformBufferMemory;															//Allocated Memory Dedicated to Uniform Buffer
 		VkDescriptorPool			vkDescriptorPool;																//Descriptor Pool
 		VkDescriptorSet				vkDescriptorSet;																//Descriptor Set
+		bool						vkRebuildBuffers;																//Reminds Vulkan to Rebuild Vertex, Index, and Uniform Buffers
 
 		VkResult					CreateBuffer(VkDeviceSize _deviceSize, VkBufferUsageFlags _usageFlags, VkMemoryPropertyFlags _propertyFlags, VkBuffer& _buffer, VkDeviceMemory& _bufferMemory); //General buffer creation function
 		VkResult					CopyBuffer(VkBuffer _srcBuffer, VkBuffer _destBuffer, VkDeviceSize _size);		//Copies buffer information from src to dest
@@ -235,7 +206,6 @@ namespace Vulkan_Renderer
 
 		void						CreateGlfwWindow();																//Creates OGL window
 		static void					OnWindowResized(GLFWwindow* _window, int _width, int _height);					//Recreates Swap Chain after window resize
-
 		////////////////////////////////////////OPENGL MEMBERS AND FUNCTIONS////////////////////////////////////////
 
 		const std::vector<const char*> deviceExtensions = { "VK_KHR_swapchain" };

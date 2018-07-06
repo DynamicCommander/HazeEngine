@@ -13,6 +13,8 @@ using namespace Haze_Engine;
 
 #include "VulkanRenderer.h"
 
+#include "Model.h"
+
 #include <vector>
 #include <set>
 #include <iostream>
@@ -87,6 +89,11 @@ namespace Vulkan_Renderer
 	
 	void VulkanRenderer::Update(float _deltaTime)
 	{
+		if (vkRebuildBuffers)
+		{
+			CreateVertexBuffer();
+			CreateIndexBuffer();
+		}
 		UpdateUniformBuffer(_deltaTime);
 		SetVkrWindowClose(glfwWindowShouldClose(glfwWindow));
 	}
@@ -375,19 +382,27 @@ namespace Vulkan_Renderer
 	VkResult VulkanRenderer::CreateVertexBuffer()
 	{
 		VkResult vk_result;
+
+		vkDestroyBuffer(vkLogicalDevice, vkVertexBuffer, nullptr);
 	
-		VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
+		VkDeviceSize bufferSize = 0;
+		std::vector<Entity*> entities = hzEngine->GetEntityManager()->FindEntitiesByType<Model>();
+		for (int i = 0; i < entities.size(); i++)
+		{
+			bufferSize += sizeof(VkVertex) * entities[i]->GetComponent<Model>().GetVertices().size();
+		}
 	
 		VkBuffer stagingBuffer;
 		VkDeviceMemory stagingBufferMemory;
 		vk_result = CreateBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
 		IS_VK_SUCCESS(vk_result, "Failed to Create Staging Buffer");
-	
+
 		void* data;
 		vkMapMemory(vkLogicalDevice, stagingBufferMemory, 0, bufferSize, 0, &data);
+		for (int i = 0; i < entities.size(); i++)
 			memcpy(data, vertices.data(), bufferSize);
 		vkUnmapMemory(vkLogicalDevice, stagingBufferMemory);
-	
+
 		vk_result = CreateBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vkVertexBuffer, vkVertexBufferMemory);
 		IS_VK_SUCCESS(vk_result, "Failed to Create Vertex Buffer");
 	
@@ -750,8 +765,8 @@ namespace Vulkan_Renderer
 		VkPipelineVertexInputStateCreateInfo vertexInputInfo = {}; 
 		vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO; 
 	
-		auto bindingDescription = Vertex::GetBindingDescription();
-		auto attributeDescriptions = Vertex::GetAttributeDescriptions();
+		auto bindingDescription = VkVertex::GetBindingDescription();
+		auto attributeDescriptions = VkVertex::GetAttributeDescriptions();
 	
 		vertexInputInfo.vertexBindingDescriptionCount = 1; 
 		vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
@@ -988,7 +1003,7 @@ namespace Vulkan_Renderer
 			vkCmdBindIndexBuffer(vkCommandBuffers[i], vkIndexBuffer, 0, VK_INDEX_TYPE_UINT16);
 			vkCmdBindDescriptorSets(vkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, vkPipelineLayout, 0, 1, &vkDescriptorSet, 0, nullptr);
 	
-			vkCmdDrawIndexed(vkCommandBuffers[i], static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
+			vkCmdDrawIndexed(vkCommandBuffers[i], static_cast<uint16_t>(indices.size()), 1, 0, 0, 0);
 			//vkCmdDraw(vkCommandBuffers[i], static_cast<uint32_t>(vertices.size()), 1, 0, 0);
 	
 			vkCmdEndRenderPass(vkCommandBuffers[i]);

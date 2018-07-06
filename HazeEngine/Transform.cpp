@@ -5,29 +5,6 @@ namespace Haze_Engine
 {
 	CLASS_DEFINITION(ECS::Component, Transform)
 
-	Transform::Transform()
-	{
-		parent = nullptr;
-		children = std::vector<Transform*>();
-
-		localPosition = vec3(0.0f, 0.0f, 0.0f);
-		worldPosition = vec3(0.0f, 0.0f, 0.0f);
-
-		localRotation = vec3(0.0f, 0.0f, 0.0f);
-		worldRotation = vec3(0.0f, 0.0f, 0.0f);
-
-		localScale = vec3(1.0f, 1.0f, 1.0f);
-		worldScale = vec3(1.0f, 1.0f, 1.0f);
-
-		forward = vec3(0.0f, 0.0f, 1.0f);
-		right = vec3(1.0f, 0.0f, 0.0f);
-		up = vec3(0.0f, 1.0f, 0.0f);
-
-		yaw = 0.0f;
-		pitch = 0.0f;
-		roll = 0.0f;
-	}
-
 	Transform::~Transform()
 	{
 
@@ -48,11 +25,13 @@ namespace Haze_Engine
 	void Transform::Rotate(vec3 _rotation)
 	{
 		worldRotation *= _rotation;
+		normalize(worldRotation);
 	}
 
 	void Transform::Rotate(float _x, float _y, float _z)
 	{
 		worldRotation *= vec3(_x, _y, _z);
+		normalize(worldRotation);
 	}
 
 	void Transform::Scale(vec3 _scale)
@@ -67,11 +46,25 @@ namespace Haze_Engine
 		worldScale.z += _z;
 	}
 
+	mat4 Transform::CalculateTranslationMatrix()
+	{
+		translationMatrix = translate(mat4(1.0), worldPosition);
+		return translationMatrix;
+	}
+
+	mat4 Transform::CalculateRotationMatrix()
+	{
+		rotationMatrix = rotate(rotationMatrix, radians(worldRotation.x), vec3(1.0f, 0.0f, 0.0f));
+		rotationMatrix = rotate(rotationMatrix, radians(worldRotation.y), vec3(0.0f, 1.0f, 0.0f));
+		rotationMatrix = rotate(rotationMatrix, radians(worldRotation.z), vec3(0.0f, 0.0f, 1.0f));
+		return rotationMatrix;
+	}
+
 	void Transform::CalculateFront()
 	{
-		forward.x = -sin(radians(yaw)) * cos(radians(pitch));
+		forward.x = cos(radians(yaw)) * cos(radians(pitch));
 		forward.y = sin(radians(pitch));
-		forward.z = cos(radians(yaw)) * cos(radians(pitch));
+		forward.z = sin(radians(yaw)) * cos(radians(pitch));
 		forward = normalize(forward);
 	}
 

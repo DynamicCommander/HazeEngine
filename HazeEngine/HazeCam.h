@@ -27,7 +27,13 @@ namespace Haze_Engine
 	CLASS_DECLARATION( HazeCam ) 
 
 	public:
-		HazeCam();
+
+		HazeCam(ECS::Entity* _owner) : Transform(_owner) 
+		{
+			this->viewMatrix = mat4();
+			this->perspectiveMatrix = mat4();
+		};
+
 		~HazeCam();
 
 		////////////////////////////////////////HAZE CAMERA ROUTINES//////////////////////////////////////////
@@ -53,7 +59,6 @@ namespace Haze_Engine
 		////////////////////////////////////////HAZE CAMERA MEMBERS///////////////////////////////////////////
                                                                                   
 	private:
-
 		////////////////////////////////////////HAZE CAMERA MEMBERS///////////////////////////////////////////
 		HazeEngine *	hzEngine;																			//Haze Engine Instance
 

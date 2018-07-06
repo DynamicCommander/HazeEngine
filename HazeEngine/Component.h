@@ -21,13 +21,13 @@ namespace ECS
 
 	public:
 
-		Component();
+		Component(Entity* _owner);
 		Component(std::string && initialValue);
 
 		~Component();
 
 		static const std::size_t Type;
-		virtual bool isClassType(const std::size_t classType) const 
+		virtual bool IsClassType(const std::size_t classType) const 
 		{
 			return classType == Type;
 		}
