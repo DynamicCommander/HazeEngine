@@ -85,7 +85,7 @@
       <Filter>HazeEngine\Model</Filter>
     </ClInclude>
     <ClInclude Include="VkVertex.h">
-      <Filter>Header Files</Filter>
+      <Filter>VulkanRenderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -126,7 +126,7 @@
       <Filter>HazeEngine\Model</Filter>
     </ClCompile>
     <ClCompile Include="VkVertex.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>VulkanRenderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -13,8 +13,6 @@ namespace Haze_Engine
 
 	class Transform : public ECS::Component
 	{
-		CLASS_DECLARATION(Transform)
-
 	public:
 
 		Transform(ECS::Entity* _owner) : Component(_owner) 
@@ -31,7 +29,7 @@ namespace Haze_Engine
 			localScale = vec3(1.0f, 1.0f, 1.0f);
 			worldScale = vec3(1.0f, 1.0f, 1.0f);
 
-			forward = vec3(0.0f, 0.0f, 1.0f);
+			forward = vec3(0.0f, 0.0f, -1.0f);
 			right = vec3(1.0f, 0.0f, 0.0f);
 			up = vec3(0.0f, 1.0f, 0.0f);
 
@@ -48,8 +46,8 @@ namespace Haze_Engine
 		void Translate(vec3 _direction);
 		void Translate(float _x, float _y, float _z);
 
-		void Rotate(vec3 _rotation);
-		void Rotate(float _x, float _y, float _z);
+		void Rotate(float _angleByRadians, vec3 _rotationAxis);
+		void Rotate(float _angleByRadians, float _x, float _y, float _z);
 
 		void Scale(vec3 _scale);
 		void Scale(float _x, float _y, float _z);
@@ -65,10 +63,10 @@ namespace Haze_Engine
 		quat GetLocalRotation()	{ return quat(localRotation); }
 		quat GetWorldRotation() { return quat(worldRotation); }
 
-		void LocalRotation(vec3 _localRotation) { localRotation = _localRotation; }
-		void LocalRotation(float _x, float _y, float _z, float _w) { localRotation = vec3(_x, _y, _z); }
-		void WorldRotation(vec3 _worldRotation) { worldRotation = _worldRotation; }
-		void WorldRotation(float _x, float _y, float _z, float _w) { worldRotation = vec3(_x, _y, _z); }
+		void LocalRotation(quat _localRotation) { localRotation = _localRotation; }
+		void LocalRotation(float _x, float _y, float _z, float _w) { localRotation = quat(_w, _x, _y, _z); }
+		void WorldRotation(quat _worldRotation) { worldRotation = _worldRotation; }
+		void WorldRotation(float _x, float _y, float _z, float _w) { worldRotation = quat(_w, _x, _y, _z); }
 
 		vec3 GetLocalScale()	{ return localScale; }
 		vec3 GetWorldScale()	{ return worldScale; }
@@ -97,8 +95,8 @@ namespace Haze_Engine
 		vec3 localPosition;
 		vec3 worldPosition;
 			 
-		vec3 localRotation;
-		vec3 worldRotation;
+		quat localRotation;
+		quat worldRotation;
 			 
 		vec3 localScale;
 		vec3 worldScale;
@@ -115,6 +113,8 @@ namespace Haze_Engine
 		mat4 rotationMatrix;
 
 	private:
+
+		CLASS_DECLARATION(Transform)
 
 		Transform*				parent;
 		std::vector<Transform*> children;

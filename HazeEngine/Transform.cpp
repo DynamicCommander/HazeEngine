@@ -12,26 +12,30 @@ namespace Haze_Engine
 
 	void Transform::Translate(vec3 _direction)
 	{
-		worldPosition += _direction;
+		mat4 t = translate(mat4(1.0f), _direction);
+		worldPosition += vec3(t[3]);
 	}
 
 	void Transform::Translate(float _x, float _y, float _z)
 	{
-		worldPosition.x += _x;
-		worldPosition.y += _y;
-		worldPosition.z += _z;
+		vec3 direction = vec3();
+		direction.x += _x;
+		direction.y += _y;
+		direction.z += _z;
+		Translate(direction);
 	}
 
-	void Transform::Rotate(vec3 _rotation)
+	void Transform::Rotate(float _angleByRadians, vec3 _rotation)
 	{
-		worldRotation *= _rotation;
-		normalize(worldRotation);
+		worldRotation = rotate(worldRotation, _angleByRadians, _rotation);
+		rotationMatrix = rotate(rotationMatrix, _angleByRadians, _rotation);
 	}
 
-	void Transform::Rotate(float _x, float _y, float _z)
+	void Transform::Rotate(float _angleByRadians, float _x, float _y, float _z)
 	{
-		worldRotation *= vec3(_x, _y, _z);
-		normalize(worldRotation);
+		vec3 rotation = vec3(_x, _y, _z);
+		worldRotation = rotate(worldRotation, _angleByRadians, rotation);
+		rotationMatrix = rotate(rotationMatrix, _angleByRadians, rotation);
 	}
 
 	void Transform::Scale(vec3 _scale)
@@ -54,28 +58,25 @@ namespace Haze_Engine
 
 	mat4 Transform::CalculateRotationMatrix()
 	{
-		rotationMatrix = rotate(rotationMatrix, radians(worldRotation.x), vec3(1.0f, 0.0f, 0.0f));
-		rotationMatrix = rotate(rotationMatrix, radians(worldRotation.y), vec3(0.0f, 1.0f, 0.0f));
-		rotationMatrix = rotate(rotationMatrix, radians(worldRotation.z), vec3(0.0f, 0.0f, 1.0f));
 		return rotationMatrix;
 	}
 
 	void Transform::CalculateFront()
 	{
-		forward.x = cos(radians(yaw)) * cos(radians(pitch));
-		forward.y = sin(radians(pitch));
-		forward.z = sin(radians(yaw)) * cos(radians(pitch));
-		forward = normalize(forward);
+		static const vec3 z(0.0f, 0.0f, -1.0f);
+		conjugate(worldRotation) * z;
 	}
 
 	void Transform::CalculateRight()
 	{
-		right = normalize(cross(forward, up));
+		static const vec3 z(1.0f, 0.0f, 0.0f);
+		conjugate(worldRotation) * right;
 	}
 
 	void Transform::CalculateUp()
 	{
-		up = -normalize(cross(right, forward));
+		static const vec3 z(0.0f, 1.0f, 0.0f);
+		conjugate(worldRotation) * up;
 	}
 
 }

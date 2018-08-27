@@ -10,6 +10,11 @@ namespace Haze_Engine
 		color = vec3(0.0f, 0.0f, 0.0f);
 	}
 
+	Vertex::Vertex(vec3 _position, vec3 _color)
+	{
+		position = _position;
+		_color = _color;
+	}
 
 	Vertex::~Vertex()
 	{

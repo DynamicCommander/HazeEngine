@@ -9,6 +9,7 @@ namespace Haze_Engine
 	{
 	public:
 		Vertex();
+		Vertex(vec3 _position, vec3 _color);
 		~Vertex();
 
 		vec3 GetPosition() { return position; }

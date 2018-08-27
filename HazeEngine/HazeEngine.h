@@ -6,6 +6,7 @@
 <June 27th, 2018>
 <9:09AM>
 <HazeEngine.cpp>
+Singleton Implementation, Accesible from any location, just needs "HazeEngine.h" included to access.
 <Haze Engine Class Declaration>
 */
 
@@ -27,12 +28,10 @@ using namespace ECS;
 #include <time.h>
 #include <set>
 
-static Haze_Engine::HazeEngine* hazeEngine;
-
-enum Active_Renderer {DIRECTX, VULKAN, OPENGL};
-
 namespace Haze_Engine
 {
+	enum Active_Renderer { DIRECTX, VULKAN, OPENGL };
+
 	class HazeEngine
 	{
 	protected:
@@ -46,27 +45,37 @@ namespace Haze_Engine
 	
 	public:
 
-		HazeEngine();																						//Haze Engine Constructor
+		////////////////////////////////////////HAZE ENGINE SINGLETON INSTANCE//////////////////////////////////////////
+		static HazeEngine* Instance( )
+		{
+			static HazeEngine instance;
+			return &instance;
+		}
+
+		HazeEngine(HazeEngine const&) = delete;
+		void operator=(HazeEngine const&) = delete;
+
 		~HazeEngine();																						//Haze Engine Destructor
+		////////////////////////////////////////HAZE ENGINE SINGLETON INSTANCE//////////////////////////////////////////
 
 		////////////////////////////////////////HAZE ENGINE MEMBERS//////////////////////////////////////////
-		HazeCam*					GetCamera()				{ return this->camera; }						//Public access to Camera Object.
-		HazeInput*					GetInput()				{ return this->input; }							//Public access to Input Object
-		VulkanRenderer*				GetVulkanRenderer()		{ return this->vkr; }							//Public access to Vulkan Renderer
-		EntityManager*				GetEntityManager()		{ return this->entityManager; }					//Public acceess to Entity Manager
+		HazeCam*					GetCamera( )				{ return this->camera; }						//Public access to Camera Object.
+		HazeInput*					GetInput( )				{ return this->input; }							//Public access to Input Object
+		VulkanRenderer*				GetVulkanRenderer( )		{ return this->vkr; }							//Public access to Vulkan Renderer
+		EntityManager*				GetEntityManager( )		{ return this->entityManager; }					//Public acceess to Entity Manager
 		////////////////////////////////////////HAZE ENGINE MEMBERS//////////////////////////////////////////
 
 		////////////////////////////////////////HAZE ENGINE ROUTINES//////////////////////////////////////////
-		void						HazeInit();																//Initialization of Haze Engine, creates all systems.
-		void						HazeUpdate();															//Update of Haze Engine, calculates dt then passes it to all object updates.
+		void						HazeInit( );															//Initialization of Haze Engine, creates all systems.
+		void						HazeUpdate( );															//Update of Haze Engine, calculates dt then passes it to all object updates.
 
 		template <class T>
-		T*							CreateSystem();
+		T*							CreateSystem( );
 
 		template <class T>
 		T*							FindSystemByType(T _system);
 
-		const bool					IsShutDown() { return shutDown; }										//Status of Engine
+		const bool					IsShutDown( ) { return shutDown; }										//Status of Engine
 		////////////////////////////////////////HAZE ENGINE ROUTINES//////////////////////////////////////////
 	
 	private:
@@ -83,9 +92,11 @@ namespace Haze_Engine
 
 
 		////////////////////////////////////////HAZE ENGINE ROUTINES/////////////////////////////////////////
+		HazeEngine( ) { }
+
 		void						SetShutDown(const bool _shutDown) { shutDown = _shutDown; }				//Set Engine Status
 
-		void						CheckFPS();																//Checks to see if FPS needs reset
+		void						CheckFPS( );																//Checks to see if FPS needs reset
 		////////////////////////////////////////HAZE ENGINE ROUTINES/////////////////////////////////////////
 	};
 	

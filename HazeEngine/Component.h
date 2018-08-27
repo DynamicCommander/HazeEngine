@@ -9,11 +9,23 @@
 <Component Class Declaration>
 */
 
-#define CLASS_DECLARATION( classname ) 
-#define CLASS_DEFINITION( parentclass, childclass )
-
 namespace ECS
 { 
+
+#define CLASS_DECLARATION( classname )										\
+public:																		\
+	static const std::size_t Type;											\
+	virtual bool isClassType(const std::size_t classType) const override;	\
+
+#define CLASS_DEFINITION( parentclass, childclass )										\
+const std::size_t childclass::Type = std::hash< std::string >()(TO_STRING(childclass)); \
+bool childclass::isClassType(const std::size_t classType) const							\
+{																						\
+		if (classType == childclass::Type)                                              \
+			return true;                                                                \
+			return parentclass::isClassType(classType);                                 \
+}																						\
+
 	class Entity;
 
 	class Component
@@ -27,7 +39,7 @@ namespace ECS
 		~Component();
 
 		static const std::size_t Type;
-		virtual bool IsClassType(const std::size_t classType) const 
+		virtual bool isClassType(const std::size_t classType) const 
 		{
 			return classType == Type;
 		}

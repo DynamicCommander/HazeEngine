@@ -77,7 +77,7 @@ namespace ECS
 	{
 		for (auto && component : components) 
 		{
-			if (component->IsClassType(ComponentType::Type))
+			if (component->isClassType(ComponentType::Type))
 				return *static_cast< ComponentType * >(component.get());
 		}
 
@@ -155,7 +155,7 @@ namespace ECS
 	{
 		for (auto && component : components)
 		{
-			if (component->IsClassType(ComponentType::Type))
+			if (component->isClassType(ComponentType::Type))
 				return true;
 		}
 

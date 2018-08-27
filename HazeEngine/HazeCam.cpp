@@ -8,9 +8,9 @@ Generic Camera class used for main camera in Haze Engine application
 */
 
 #include "stdafx.h"
+#include "HazeCam.h"
 
 #include "HazeEngine.h"
-#include "HazeCam.h"
 
 #include "Haze_Functions_STD.h"
 
@@ -22,22 +22,23 @@ namespace Haze_Engine
 	{
 	}
 
-	void HazeCam::hzCameraInit(HazeEngine* _hzEngine)
+	void HazeCam::hzCameraInit()
 	{
-		hzEngine = _hzEngine;
-
 		origin = vec3(0.0f, 0.0f, 0.0f);
 
-		WorldPosition(vec3(0.0f, 0.0f, 3.0f));
+		WorldPosition(vec3(0.0f, 0.0f, 0.0f));
 
-		glfwSetInputMode(hzEngine->GetVulkanRenderer()->GetGLFWWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetInputMode(HazeEngine::Instance()->GetVulkanRenderer()->GetGLFWWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		SetPerspective();
 	}
 
 	void HazeCam::hzCameraUpdate(float _deltaTime)
 	{
 		deltaTime = _deltaTime;
-
+		Haze_Functions_STD::console("World Position");
+		Haze_Functions_STD::console(worldPosition);
+		Haze_Functions_STD::console("World Rotation");
+		Haze_Functions_STD::console(worldRotation);
 		UpdateViewMatrix();
 	}
 
@@ -73,23 +74,27 @@ namespace Haze_Engine
 
 	void HazeCam::YawPitchRoll(float _yawRadians, float _pitchRadians, float _rollRadians)
 	{
-		yaw += _yawRadians * hzEngine->GetInput()->GetMouseXSensitivity() * deltaTime;
-		pitch += _pitchRadians * hzEngine->GetInput()->GetMouseYSensitivity() * deltaTime;
+		yaw += _yawRadians * HazeEngine::Instance()->GetInput()->GetMouseXSensitivity() * deltaTime;
+		pitch += _pitchRadians * HazeEngine::Instance()->GetInput()->GetMouseYSensitivity() * deltaTime;
 		roll += _rollRadians;
 
 		clamp(pitch, -89.0f, 89.0f);
 
-		Rotate(yaw, pitch, roll);
+		Rotate(yaw, up);
+		Rotate(pitch, right);
+		Rotate(roll, forward);
 	}
 
 	void HazeCam::SetPerspective()
 	{
-		perspectiveMatrix = perspective(radians(fieldOfView), hzEngine->GetVulkanRenderer()->GetAspectRatio(), zNear, zFar);
+		perspectiveMatrix = perspective(radians(fieldOfView), HazeEngine::Instance()->GetVulkanRenderer()->GetAspectRatio(), zNear, zFar);
 	}
 
 	void HazeCam::UpdateViewMatrix()
 	{
 		//viewMatrix = lookAt(GetWorldPosition(), GetWorldPosition() + GetForward(), GetUp());
+		CalculateTranslationMatrix();
+		CalculateRotationMatrix();
 		viewMatrix = translationMatrix * rotationMatrix;
 	}
 
