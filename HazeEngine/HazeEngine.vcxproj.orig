@@ -23,7 +23,7 @@
     <ProjectGuid>{1166F9BE-37C6-48D2-8CEE-472F3DC633D0}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>HazeEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -90,7 +90,11 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\CLIENT\HAZE\HazeEngine\Libraries\glfw-3.2.1\glfw-3.2.1.bin.WIN32\include;C:\CLIENT\HAZE\HazeEngine\Libraries\glm;C:\CLIENT\HAZE\HazeEngine\Libraries\VulkanSDK\1.1.77.0\Include</AdditionalIncludeDirectories>
+<<<<<<< Updated upstream
+      <AdditionalIncludeDirectories>C:\CLIENT\HAZE\HazeEngine\Libraries\glfw-3.2.1\glfw-3.2.1.bin.WIN32\include;C:\CLIENT\HAZE\HazeEngine\Libraries\VulkanSDK\1.1.77.0\Include;C:\CLIENT\HAZE\HazeEngine\Libraries\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+=======
+      <AdditionalIncludeDirectories>C:\CLIENT\HAZE\HazeEngine\Libraries\glfw-3.2.1\glfw-3.2.1.bin.WIN32\include;C:\CLIENT\HAZE\HazeEngine\Libraries\glm;C:\CLIENT\HAZE\HazeEngine\Libraries\VulkanSDK\1.1.77.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+>>>>>>> Stashed changes
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,7 +130,11 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\CLIENT\HAZE\HazeEngine\Libraries\glfw-3.2.1\glfw-3.2.1.bin.WIN32\include;C:\CLIENT\HAZE\HazeEngine\Libraries\glm;C:\CLIENT\HAZE\HazeEngine\Libraries\VulkanSDK\1.1.77.0\Include</AdditionalIncludeDirectories>
+<<<<<<< Updated upstream
+      <AdditionalIncludeDirectories>C:\CLIENT\HAZE\HazeEngine\Libraries\glfw-3.2.1\glfw-3.2.1.bin.WIN32\include;C:\CLIENT\HAZE\HazeEngine\Libraries\VulkanSDK\1.1.77.0\Include;C:\CLIENT\HAZE\HazeEngine\Libraries\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+=======
+      <AdditionalIncludeDirectories>C:\CLIENT\HAZE\HazeEngine\Libraries\glfw-3.2.1\glfw-3.2.1.bin.WIN32\include;C:\CLIENT\HAZE\HazeEngine\Libraries\glm;C:\CLIENT\HAZE\HazeEngine\Libraries\VulkanSDK\1.1.77.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+>>>>>>> Stashed changes
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

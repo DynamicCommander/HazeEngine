@@ -31,15 +31,10 @@ namespace Haze_Engine
 	void HazeCam::hzCameraInit(HazeEngine* _hzEngine)
 	{
 		hzEngine = _hzEngine;
-
+		
 		origin = vec3(0.0f, 0.0f, 0.0f);
 
-		LocalPosition(0.0f, 0.0f, 0.0f);
-		WorldPosition(0.0f, 0.0f, -3.0f);
-
-		CalculateFront();
-		CalculateRight();
-		CalculateUp();
+		WorldPosition(vec3(0.0f, 0.0f, -3.0f));
 
 		glfwSetInputMode(hzEngine->GetVulkanRenderer()->GetGLFWWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		SetPerspective();
@@ -69,10 +64,10 @@ namespace Haze_Engine
 		Translate(-normalize(cross(GetForward(), GetUp())) * cameraMoveSpeed * deltaTime);
 	}
 
-	void HazeCam::MoveRight()
+	void HazeCam::MoveRight() 
 	{
 		Translate(normalize(cross(GetForward(), GetUp())) * cameraMoveSpeed * deltaTime);
-	}
+	}		 
 
 	void HazeCam::MoveVerticalPos()
 	{
@@ -92,7 +87,9 @@ namespace Haze_Engine
 
 		clamp(pitch, -89.0f, 89.0f);
 
-		Rotate(vec3(yaw, pitch, roll));
+		Rotate(GetRight(), yaw);
+		Rotate(GetUp(), pitch);
+		Rotate(GetForward(), roll);
 	}
 
 	void HazeCam::SetPerspective()

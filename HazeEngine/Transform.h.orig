@@ -22,8 +22,7 @@ namespace Haze_Engine
 		void Translate(vec3 _direction);
 		void Translate(float _x, float _y, float _z);
 
-		void Rotate(vec3 _rotation);
-		void Rotate(float _x, float _y, float _z);
+		void Rotate(vec3 _rotation, float _angle);
 		void Rotate(float _x, float _y, float _z, float _w);
 
 		void Scale(vec3 _scale);
