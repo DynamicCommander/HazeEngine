@@ -19,9 +19,9 @@ namespace Haze_Engine
 		localScale = vec3(1.0f, 1.0f, 1.0f);
 		worldScale = vec3(1.0f, 1.0f, 1.0f);
 
-		forward = normalize(worldPosition - vec3(0.0f, 0.0f, 0.0f));
-		right = cross(forward, vec3(0.0f, 1.0f, 0.0f));
-		up = cross(forward, right);
+		forward = normalize(vec3(0.0f, 0.0f, 1.0f));
+		right = normalize(vec3(1.0f, 0.0f, 0.0f));
+		up = normalize(vec3(0.0f, 1.0f, 0.0f));
 	}
 
 	Transform::~Transform()
@@ -72,9 +72,10 @@ namespace Haze_Engine
 
 	void Transform::CalculateFront()
 	{
-		forward.x = cos(radians(yaw)) * cos(radians(pitch));
+		forward.x = cos(radians(pitch)) * sin(radians(yaw));
 		forward.y = sin(radians(pitch));
-		forward.z = sin(radians(yaw)) * cos(radians(pitch));
+		forward.z = cos(radians(pitch)) * cos(radians(yaw));
+		forward = normalize(forward);
 	}
 
 	void Transform::CalculateRight()

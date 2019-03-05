@@ -35,7 +35,7 @@ namespace Haze_Engine
 		origin = vec3(0.0f, 0.0f, 0.0f);
 
 		LocalPosition(0.0f, 0.0f, 0.0f);
-		WorldPosition(0.0f, 0.0f, -3.0f);
+		WorldPosition(0.0f, 0.0f, 3.0f);
 
 		CalculateFront();
 		CalculateRight();
@@ -49,6 +49,7 @@ namespace Haze_Engine
 	{
 		deltaTime = _deltaTime;
 
+		Haze_Functions_STD::console(worldPosition);
 		Haze_Functions_STD::console(forward);
 
 		UpdateViewMatrix();
@@ -86,13 +87,11 @@ namespace Haze_Engine
 
 	void HazeCam::YawPitchRoll(float _yawRadians, float _pitchRadians, float _rollRadians)
 	{
-		yaw += _yawRadians * hzEngine->GetInput()->GetMouseXSensitivity();
-		pitch += _pitchRadians * hzEngine->GetInput()->GetMouseYSensitivity();
+		yaw += radians(_yawRadians * hzEngine->GetInput()->GetMouseXSensitivity());
+		pitch += radians(_pitchRadians * hzEngine->GetInput()->GetMouseYSensitivity());
 		roll += _rollRadians;
 
 		clamp(pitch, -89.0f, 89.0f);
-
-		Rotate(vec3(yaw, pitch, roll));
 	}
 
 	void HazeCam::SetPerspective()
@@ -102,6 +101,9 @@ namespace Haze_Engine
 
 	void HazeCam::UpdateViewMatrix()
 	{
-		viewMatrix = lookAt(GetWorldPosition(), GetWorldPosition() + GetForward(), GetUp());
+		vec3 worldPosition = GetWorldPosition();
+		vec3 forward = GetForward();
+		vec3 up = GetUp();
+		viewMatrix = lookAt(GetWorldPosition(), GetWorldPosition() + GetForward(), vec3(0,1,0));
 	}
 }

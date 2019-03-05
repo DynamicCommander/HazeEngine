@@ -53,11 +53,13 @@ namespace Haze_Engine
 			hzEngine->GetCamera()->MoveVerticalPos();
 		else if (_key == GLFW_KEY_ESCAPE)
 			hzEngine->GetVulkanRenderer()->ShutDown();
+		else if (_key == GLFW_KEY_SPACE)
+			hzEngine->GetCamera()->WorldPosition(0, 0, 0);
 	}
 
 	void HazeInput::hzTakeMouseDirectionInput(GLFWwindow* _window, double _mouseX, double _mouseY)
 	{
-		glfwGetCursorPos(_window, &_mouseX, &_mouseY);
+		//glfwGetCursorPos(_window, &_mouseX, &_mouseY);
 
 		if (bufferFirstMouse)
 		{
@@ -68,9 +70,8 @@ namespace Haze_Engine
 
 		float xoffset = _mouseX - oldMousePosition.x;
 		float yoffset = oldMousePosition.y - _mouseY;
+		oldMousePosition = vec2(xoffset, yoffset);
 
 		hzEngine->GetCamera()->YawPitchRoll(xoffset, yoffset, 0.0f);
-
-		oldMousePosition = vec2(_mouseX, _mouseY);
 	}
 }

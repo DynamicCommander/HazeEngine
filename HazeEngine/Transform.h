@@ -79,9 +79,9 @@ namespace Haze_Engine
 		vec3					right;
 		vec3					up;
 
-		float			yaw;
-		float			pitch;
-		float			roll;
+		float					yaw;
+		float					pitch;
+		float					roll;
 
 	private:
 

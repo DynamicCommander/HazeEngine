@@ -360,7 +360,7 @@ namespace Vulkan_Renderer
 	void VulkanRenderer::UpdateUniformBuffer(float _deltaTime) 
 	{
 		UniformBufferObject ubo = {};
-		ubo.model = rotate(mat4(1.0f), _deltaTime * radians(90.0f), vec3(0.0f, 0.0f, 1.0f));
+		ubo.model = glm::rotate(glm::mat4(1.0f), _deltaTime * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		ubo.proj = hzEngine->GetCamera()->GetProjMatrix();
 		ubo.view = hzEngine->GetCamera()->GetViewMatrix();
 		ubo.proj[1][1] *= -1;
