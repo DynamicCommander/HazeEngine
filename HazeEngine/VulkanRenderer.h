@@ -129,7 +129,7 @@ namespace Vulkan_Renderer
 
 		VkResult					CreateBuffer(VkDeviceSize _deviceSize, VkBufferUsageFlags _usageFlags, VkMemoryPropertyFlags _propertyFlags, VkBuffer& _buffer, VkDeviceMemory& _bufferMemory); //General buffer creation function
 		VkResult					CopyBuffer(VkBuffer _srcBuffer, VkBuffer _destBuffer, VkDeviceSize _size);		//Copies buffer information from src to dest
-		void						UpdateUniformBuffer(uint32_t _currentImage);											//Updates uniform buffer every frame
+		void						UpdateUniformBuffer(uint32_t _currentImage);					//Updates uniform buffer every frame
 
 
 		VkResult					CreateVertexBuffer();															//Create Vertex Buffer

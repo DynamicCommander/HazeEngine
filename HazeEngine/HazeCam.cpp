@@ -22,7 +22,7 @@ namespace Haze_Engine
 	{
 	}
 
-	void HazeCam::hzCameraInit()
+	void HazeCam::hzCameraInit(HazeEngine* _hzEngine)
 	{
 		hzEngine = _hzEngine;
 
@@ -97,8 +97,8 @@ namespace Haze_Engine
 		vec3 up = GetUp();
 		viewMatrix = lookAt(GetWorldPosition(), GetWorldPosition() + GetForward(), vec3(0,1,0));
 		//viewMatrix = lookAt(GetWorldPosition(), GetWorldPosition() + GetForward(), GetUp());
-		CalculateTranslationMatrix();
-		CalculateRotationMatrix();
-		viewMatrix = translationMatrix * rotationMatrix;
+		//CalculateTranslationMatrix();
+		//CalculateRotationMatrix();
+		//viewMatrix = translationMatrix * rotationMatrix;
 	}
 }

@@ -18,6 +18,9 @@ Generic Camera class used for main camera in Haze Engine application
 
 namespace Haze_Engine
 {
+
+	class HazeEngine;
+
 	class HazeCam : public Transform
 	{
 
@@ -29,10 +32,12 @@ namespace Haze_Engine
 			this->perspectiveMatrix = mat4();
 		};
 
+		CLASS_DECLARATION(HazeCam)
+
 		~HazeCam();
 
 		////////////////////////////////////////HAZE CAMERA ROUTINES//////////////////////////////////////////
-		void			hzCameraInit();												//Camera Initialization
+		void			hzCameraInit(HazeEngine* _hzEngine);												//Camera Initialization
 		void			hzCameraUpdate(float _deltaTime);													//Camera Update
 
 		void			MoveForward();																		//Move in camera direction
@@ -54,9 +59,10 @@ namespace Haze_Engine
 		////////////////////////////////////////HAZE CAMERA MEMBERS///////////////////////////////////////////
                                                                                   
 	private:
-		CLASS_DECLARATION(HazeCam)
 
 		////////////////////////////////////////HAZE CAMERA MEMBERS///////////////////////////////////////////
+		HazeEngine *	hzEngine;
+
 		vec3			origin;																				//Origin point in world (0,0,0)
 
 		mat4			perspectiveMatrix;																	//Matrix built from FOV, Near, and Far planes

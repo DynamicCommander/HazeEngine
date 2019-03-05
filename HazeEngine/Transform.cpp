@@ -5,25 +5,6 @@ namespace Haze_Engine
 {
 	CLASS_DEFINITION(ECS::Component, Transform)
 
-	Transform::Transform()
-	{
-		parent = nullptr;
-		children = std::vector<Transform*>();
-
-		localPosition = vec3(0.0f, 0.0f, 0.0f);
-		worldPosition = vec3(0.0f, 0.0f, 0.0f);
-
-		localRotation = quat(1.0f, 0.0f, 0.0f, 0.0f);
-		worldRotation = quat(1.0f, 0.0f, 0.0f, 0.0f);
-
-		localScale = vec3(1.0f, 1.0f, 1.0f);
-		worldScale = vec3(1.0f, 1.0f, 1.0f);
-
-		forward = normalize(vec3(0.0f, 0.0f, 1.0f));
-		right = normalize(vec3(1.0f, 0.0f, 0.0f));
-		up = normalize(vec3(0.0f, 1.0f, 0.0f));
-	}
-
 	Transform::~Transform()
 	{
 
@@ -53,21 +34,12 @@ namespace Haze_Engine
 	void Transform::Rotate(float _x, float _y, float _z)
 	{
 		//Rotate(vec3(_x, _y, _z));
-        }
+    }
 
 	void Transform::Rotate(float _angleByRadians, vec3 _rotation)
 	{
 		worldRotation = rotate(worldRotation, _angleByRadians, _rotation);
 		rotationMatrix = rotate(rotationMatrix, _angleByRadians, _rotation);
-	}
-
-	void Transform::Rotate(float _angleByRadians, float _x, float _y, float _z)
-	{
-		quat toRotation(_w, _x, _y, _z);
-		worldRotation = inverse(worldRotation) * toRotation * worldRotation;
-		vec3 rotation = vec3(_x, _y, _z);
-		worldRotation = rotate(worldRotation, _angleByRadians, rotation);
-		rotationMatrix = rotate(rotationMatrix, _angleByRadians, rotation);
 	}
 
 	void Transform::Scale(vec3 _scale)

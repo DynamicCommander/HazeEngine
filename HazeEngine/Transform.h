@@ -23,22 +23,18 @@ namespace Haze_Engine
 			localPosition = vec3(0.0f, 0.0f, 0.0f);
 			worldPosition = vec3(0.0f, 0.0f, 0.0f);
 
-			localRotation = vec3(0.0f, 0.0f, 0.0f);
-			worldRotation = vec3(0.0f, 0.0f, 0.0f);
+			localRotation = quat(1.0f, 0.0f, 0.0f, 0.0f);
+			worldRotation = quat(1.0f, 0.0f, 0.0f, 0.0f);
 
 			localScale = vec3(1.0f, 1.0f, 1.0f);
 			worldScale = vec3(1.0f, 1.0f, 1.0f);
 
-			forward = vec3(0.0f, 0.0f, -1.0f);
-			right = vec3(1.0f, 0.0f, 0.0f);
-			up = vec3(0.0f, 1.0f, 0.0f);
+			forward = normalize(vec3(0.0f, 0.0f, 1.0f));
+			right = normalize(vec3(1.0f, 0.0f, 0.0f));
+			up = normalize(vec3(0.0f, 1.0f, 0.0f));
 
 			translationMatrix = mat4();
 			rotationMatrix = mat4(1.0f);
-
-			yaw = 0.0f;
-			pitch = 0.0f;
-			roll = 0.0f;
 		};
 
 		~Transform();
@@ -51,7 +47,6 @@ namespace Haze_Engine
 		void Rotate(float _x, float _y, float _z, float _w);
 
 		void Rotate(float _angleByRadians, vec3 _rotationAxis);
-		void Rotate(float _angleByRadians, float _x, float _y, float _z);
 
 		void Scale(vec3 _scale);
 		void Scale(float _x, float _y, float _z);
