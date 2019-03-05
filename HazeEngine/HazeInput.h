@@ -1,4 +1,5 @@
-#pragma once
+#ifndef HAZE_INPUT_H
+#define HAZE_INPUT_H
 
 /*
 <Dylan Higbee>
@@ -50,3 +51,4 @@ namespace Haze_Engine
 	};
 
 }
+#endif

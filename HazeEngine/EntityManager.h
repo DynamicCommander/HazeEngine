@@ -36,13 +36,47 @@ namespace ECS
 
 		Entity* FindEntity(Entity_ID _id);
 
+		template <class T>
+		Entity* FindEntityByType();
+
+		template <class T>
+		std::vector<Entity*> FindEntitiesByType();
+
 	private:
 		Haze_Engine::HazeEngine * hzEngine;
 
 		int currentEntityID = 0;
-
 		std::map<Entity_ID, Entity*> entities;
 	};
+
+
+	template <class T>
+	Entity* EntityManager::FindEntityByType()
+	{
+		for (std::map<Entity_ID, Entity*>::iterator iter = entities.begin(); iter != entities.end(); iter++)
+		{
+			if (iter->second->Contains<T>())
+			{
+				return iter->second;
+			}
+		}
+	}
+
+	template <class T>
+	std::vector<Entity*> EntityManager::FindEntitiesByType()
+	{
+		std::vector<Entity*> entitiesByName;
+		for (std::map<Entity_ID, Entity*>::iterator iter = entities.begin(); iter != entities.end(); iter++)
+		{
+			if (iter->second->Contains<T>())
+			{
+				entitiesByName.push_back(iter->second);
+			}
+		}
+
+		return entitiesByName;
+	}
+
 }
 
 #endif

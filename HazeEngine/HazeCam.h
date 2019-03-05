@@ -14,24 +14,25 @@ Generic Camera class used for main camera in Haze Engine application
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 
-
 #include "Transform.h"
 
 namespace Haze_Engine
 {
-	class HazeEngine;
-
 	class HazeCam : public Transform
 	{
 
-	CLASS_DECLARATION( HazeCam ) 
-
 	public:
-		HazeCam();
+
+		HazeCam(ECS::Entity* _owner) : Transform(_owner) 
+		{
+			this->viewMatrix = mat4();
+			this->perspectiveMatrix = mat4();
+		};
+
 		~HazeCam();
 
 		////////////////////////////////////////HAZE CAMERA ROUTINES//////////////////////////////////////////
-		void			hzCameraInit(HazeEngine* _hzEngine);												//Camera Initialization
+		void			hzCameraInit();												//Camera Initialization
 		void			hzCameraUpdate(float _deltaTime);													//Camera Update
 
 		void			MoveForward();																		//Move in camera direction
@@ -53,10 +54,9 @@ namespace Haze_Engine
 		////////////////////////////////////////HAZE CAMERA MEMBERS///////////////////////////////////////////
                                                                                   
 	private:
+		CLASS_DECLARATION(HazeCam)
 
 		////////////////////////////////////////HAZE CAMERA MEMBERS///////////////////////////////////////////
-		HazeEngine *	hzEngine;																			//Haze Engine Instance
-
 		vec3			origin;																				//Origin point in world (0,0,0)
 
 		mat4			perspectiveMatrix;																	//Matrix built from FOV, Near, and Far planes

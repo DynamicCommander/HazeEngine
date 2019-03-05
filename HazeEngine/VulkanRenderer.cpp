@@ -13,6 +13,8 @@ using namespace Haze_Engine;
 
 #include "VulkanRenderer.h"
 
+#include "Model.h"
+
 #include <vector>
 #include <set>
 #include <iostream>
@@ -36,8 +38,11 @@ namespace Vulkan_Renderer
 	
 		vkDestroyDescriptorSetLayout(vkLogicalDevice, vkDescriptorSetLayout, nullptr);
 	
-		vkDestroyBuffer(vkLogicalDevice, vkUniformBuffer, nullptr);
-		vkFreeMemory(vkLogicalDevice, vkUniformBufferMemory, nullptr);
+		for (int i = 0; i < vkSwapChainImages.size(); i++)
+		{
+			vkDestroyBuffer(vkLogicalDevice, vkUniformBuffers[i], nullptr);
+			vkFreeMemory(vkLogicalDevice, vkUniformBuffersMemory[i], nullptr);
+		}
 	
 		vkDestroyBuffer(vkLogicalDevice, vkIndexBuffer, nullptr);
 		vkFreeMemory(vkLogicalDevice, vkIndexBufferMemory, nullptr);
@@ -76,18 +81,22 @@ namespace Vulkan_Renderer
 		vk_result = CreateGraphicsPipeline();
 		vk_result = CreateFrameBuffers();
 		vk_result = CreateCommandPool();
-		vk_result = CreateVertexBuffer();
-		vk_result = CreateIndexBuffer();
 		vk_result = CreateUniformBuffer();
 		vk_result = CreateDescriptorPool();
 		vk_result = CreateDescriptorSet();
-		vk_result = CreateCommandBuffers();
+
 		vk_result = CreateSemaphores();
 	}
 	
 	void VulkanRenderer::Update(float _deltaTime)
 	{
-		UpdateUniformBuffer(_deltaTime);
+		if (vkRebuildBuffers)
+		{
+			CreateVertexBuffer();
+			CreateIndexBuffer();
+			CreateCommandBuffers();
+		}
+
 		SetVkrWindowClose(glfwWindowShouldClose(glfwWindow));
 	}
 	
@@ -109,6 +118,8 @@ namespace Vulkan_Renderer
 		}
 		else if (vk_result != VK_SUCCESS && vk_result != VK_SUBOPTIMAL_KHR)
 			throw std::runtime_error("failed to acquire swap chain image!");
+
+		UpdateUniformBuffer(imageIndex);
 	
 		VkSubmitInfo submitInfo = {};
 		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -357,37 +368,50 @@ namespace Vulkan_Renderer
 		return vk_result;
 	}
 	
-	void VulkanRenderer::UpdateUniformBuffer(float _deltaTime) 
-	{
-		UniformBufferObject ubo = {};
-		ubo.model = glm::rotate(glm::mat4(1.0f), _deltaTime * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		ubo.proj = hzEngine->GetCamera()->GetProjMatrix();
-		ubo.view = hzEngine->GetCamera()->GetViewMatrix();
-		ubo.proj[1][1] *= -1;
-	
+	void VulkanRenderer::UpdateUniformBuffer(uint32_t _currentImage) 
+	{	
+		std::vector<Entity*> entities = HazeEngine::Instance()->GetEntityManager()->FindEntitiesByType<Model>();
+
+
 		void* data;
-		vkMapMemory(vkLogicalDevice, vkUniformBufferMemory, 0, sizeof(ubo), 0, &data);
-		memcpy(data, &ubo, sizeof(ubo));
-		vkUnmapMemory(vkLogicalDevice, vkUniformBufferMemory);
-		
+		for (int i = 0; i < entities.size(); i++)
+	        {	
+			UniformBufferObject ubo = {};
+			ubo.model = entities[i]->GetComponent<Model>().BuildMVPMatrix();
+			ubo.proj = HazeEngine::Instance()->GetCamera()->GetProjMatrix();
+			ubo.view = HazeEngine::Instance()->GetCamera()->GetViewMatrix();
+			ubo.proj[1][1] *= -1;
+
+			vkMapMemory(vkLogicalDevice, vkUniformBuffersMemory[_currentImage], sizeof(UniformBufferObject) * i, sizeof(ubo), 0, &data);
+			memcpy(data, &ubo, sizeof(ubo));
+			vkUnmapMemory(vkLogicalDevice, vkUniformBuffersMemory[_currentImage]);
+		}
 	}
 	
 	VkResult VulkanRenderer::CreateVertexBuffer()
 	{
 		VkResult vk_result;
 	
-		VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
+		VkDeviceSize bufferSize = 0;
+		std::vector<Entity*> entities = HazeEngine::Instance()->GetEntityManager()->FindEntitiesByType<Model>();
+		for (int i = 0; i < entities.size(); i++)
+		{
+			bufferSize += sizeof(VkVertex) * entities[i]->GetComponent<Model>().GetVertices()->size();
+		}
 	
 		VkBuffer stagingBuffer;
 		VkDeviceMemory stagingBufferMemory;
 		vk_result = CreateBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
 		IS_VK_SUCCESS(vk_result, "Failed to Create Staging Buffer");
-	
+
 		void* data;
-		vkMapMemory(vkLogicalDevice, stagingBufferMemory, 0, bufferSize, 0, &data);
-			memcpy(data, vertices.data(), bufferSize);
-		vkUnmapMemory(vkLogicalDevice, stagingBufferMemory);
-	
+		for (int i = 0; i < entities.size(); i++)
+		{
+			vkMapMemory(vkLogicalDevice, stagingBufferMemory, 0, sizeof(VkVertex) * i, bufferSize, &data);
+			memcpy(data, entities[i]->GetComponent<Model>().GetVertices()->data(), (size_t)bufferSize);
+			vkUnmapMemory(vkLogicalDevice, stagingBufferMemory);
+		}
+
 		vk_result = CreateBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vkVertexBuffer, vkVertexBufferMemory);
 		IS_VK_SUCCESS(vk_result, "Failed to Create Vertex Buffer");
 	
@@ -397,6 +421,7 @@ namespace Vulkan_Renderer
 		vkDestroyBuffer(vkLogicalDevice, stagingBuffer, nullptr);
 		vkFreeMemory(vkLogicalDevice, stagingBufferMemory, nullptr);
 	
+		vkRebuildBuffers = false;
 		return vk_result;
 	}
 	
@@ -404,7 +429,8 @@ namespace Vulkan_Renderer
 	{
 		VkResult vk_result;
 	
-		VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
+		std::vector<Entity*> entities = HazeEngine::Instance()->GetEntityManager()->FindEntitiesByType<Model>();
+		VkDeviceSize bufferSize = sizeof(uint16_t) * entities.size();
 	
 		VkBuffer stagingBuffer;
 		VkDeviceMemory stagingBufferMemory;
@@ -412,9 +438,12 @@ namespace Vulkan_Renderer
 		IS_VK_SUCCESS(vk_result, "Failed to Create Staging Index Buffer");
 	
 		void* data;
-		vkMapMemory(vkLogicalDevice, stagingBufferMemory, 0, bufferSize, 0, &data);
-		memcpy(data, indices.data(), (size_t)bufferSize);
-		vkUnmapMemory(vkLogicalDevice, stagingBufferMemory);
+		for (int i = 0; i < entities.size(); i++)
+		{
+			vkMapMemory(vkLogicalDevice, stagingBufferMemory, sizeof(uint16_t) * i, bufferSize, 0, &data);
+			memcpy(data, entities[i]->GetComponent<Model>().GetIndices()->data(), (size_t)bufferSize);
+			vkUnmapMemory(vkLogicalDevice, stagingBufferMemory);
+		}
 	
 		vk_result = CreateBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vkIndexBuffer, vkIndexBufferMemory);
 		IS_VK_SUCCESS(vk_result, "Failed to Create Index Buffer");
@@ -425,6 +454,7 @@ namespace Vulkan_Renderer
 		vkDestroyBuffer(vkLogicalDevice, stagingBuffer, nullptr);
 		vkFreeMemory(vkLogicalDevice, stagingBufferMemory, nullptr);
 	
+		vkRebuildBuffers = false;
 		return vk_result;
 	}
 	
@@ -432,7 +462,13 @@ namespace Vulkan_Renderer
 	{
 		VkResult vk_result;
 		VkDeviceSize bufferSize = sizeof(UniformBufferObject);
-		vk_result = CreateBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, vkUniformBuffer, vkUniformBufferMemory);
+
+		vkUniformBuffers.resize(vkSwapChainImages.size());
+		vkUniformBuffersMemory.resize(vkSwapChainImages.size());
+
+		for(int i = 0; i < vkSwapChainImages.size(); i++)
+			vk_result = CreateBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, vkUniformBuffers[i], vkUniformBuffersMemory[i]);
+
 		IS_VK_SUCCESS(vk_result, "Failed to Create Uniform Buffer");
 	
 		return vk_result;
@@ -442,18 +478,19 @@ namespace Vulkan_Renderer
 	{
 		VkResult vk_result; 
 	
-		VkDescriptorPoolSize poolSize = {};
-		poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-		poolSize.descriptorCount = 1;
-	
+		std::array<VkDescriptorPoolSize, 2> poolSizes = {};
+		poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+		poolSizes[0].descriptorCount = static_cast<uint32_t>(vkSwapChainImages.size());
+		poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		poolSizes[1].descriptorCount = static_cast<uint32_t>(vkSwapChainImages.size());
+
 		VkDescriptorPoolCreateInfo poolInfo = {};
 		poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-		poolInfo.poolSizeCount = 1;
-		poolInfo.pPoolSizes = &poolSize;
-		poolInfo.maxSets = 1;
-	
+		poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
+		poolInfo.pPoolSizes = poolSizes.data();
+		poolInfo.maxSets = static_cast<uint32_t>(vkSwapChainImages.size());
+
 		vk_result = vkCreateDescriptorPool(vkLogicalDevice, &poolInfo, nullptr, &vkDescriptorPool);
-		IS_VK_SUCCESS(vk_result, "Failed to Create Descriptor Pool!");
 	
 		return vk_result;
 	}
@@ -461,33 +498,51 @@ namespace Vulkan_Renderer
 	VkResult VulkanRenderer::CreateDescriptorSet()
 	{
 		VkResult vk_result;
-	
-		VkDescriptorSetLayout layouts[] = { vkDescriptorSetLayout };
+
+		std::vector<VkDescriptorSetLayout> layouts(vkSwapChainImages.size(), vkDescriptorSetLayout);
 		VkDescriptorSetAllocateInfo allocInfo = {};
 		allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
 		allocInfo.descriptorPool = vkDescriptorPool;
-		allocInfo.descriptorSetCount = 1;
-		allocInfo.pSetLayouts = layouts;
-	
-		vk_result = vkAllocateDescriptorSets(vkLogicalDevice, &allocInfo, &vkDescriptorSet);
-		IS_VK_SUCCESS(vk_result, "Failed to Allocate Descriptor Set!");
-	
-		VkDescriptorBufferInfo bufferInfo = {};
-		bufferInfo.buffer = vkUniformBuffer;
-		bufferInfo.offset = 0;
-		bufferInfo.range = sizeof(UniformBufferObject);
-	
-		VkWriteDescriptorSet descriptorWrite = {};
-		descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		descriptorWrite.dstSet = vkDescriptorSet;
-		descriptorWrite.dstBinding = 0;
-		descriptorWrite.dstArrayElement = 0;
-		descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-		descriptorWrite.descriptorCount = 1;
-		descriptorWrite.pBufferInfo = &bufferInfo;
-	
-		vkUpdateDescriptorSets(vkLogicalDevice, 1, &descriptorWrite, 0, nullptr);
-	
+		allocInfo.descriptorSetCount = static_cast<uint32_t>(vkSwapChainImages.size());
+		allocInfo.pSetLayouts = layouts.data();
+
+		vkDescriptorSets.resize(vkSwapChainImages.size());
+		vk_result = vkAllocateDescriptorSets(vkLogicalDevice, &allocInfo, &vkDescriptorSets[0]);
+		IS_VK_SUCCESS(vk_result, "Failed to Allocate Command Buffers!");
+
+		for (size_t i = 0; i < vkSwapChainImages.size(); i++) 
+		{
+			VkDescriptorBufferInfo bufferInfo = {};
+			bufferInfo.buffer = vkUniformBuffers[i];
+			bufferInfo.offset = 0;
+			bufferInfo.range = sizeof(UniformBufferObject);
+
+			//VkDescriptorImageInfo imageInfo = {};
+			//imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+			//imageInfo.imageView = vkTextureImageView;
+			//imageInfo.sampler = textureSampler;
+
+			std::array<VkWriteDescriptorSet, 1> descriptorWrites = {};
+
+			descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+			descriptorWrites[0].dstSet = vkDescriptorSets[i];
+			descriptorWrites[0].dstBinding = 0;
+			descriptorWrites[0].dstArrayElement = 0;
+			descriptorWrites[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+			descriptorWrites[0].descriptorCount = 1;
+			descriptorWrites[0].pBufferInfo = &bufferInfo;
+
+			//descriptorWrites[1].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+			//descriptorWrites[1].dstSet = vkDescriptorSets[i];
+			//descriptorWrites[1].dstBinding = 1;
+			//descriptorWrites[1].dstArrayElement = 0;
+			//descriptorWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+			//descriptorWrites[1].descriptorCount = 1;
+			////descriptorWrites[1].pImageInfo = &imageInfo;
+
+			vkUpdateDescriptorSets(vkLogicalDevice, static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
+		}
+
 		return vk_result;
 	}
 	
@@ -750,8 +805,8 @@ namespace Vulkan_Renderer
 		VkPipelineVertexInputStateCreateInfo vertexInputInfo = {}; 
 		vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO; 
 	
-		auto bindingDescription = Vertex::GetBindingDescription();
-		auto attributeDescriptions = Vertex::GetAttributeDescriptions();
+		auto bindingDescription = VkVertex::GetBindingDescription();
+		auto attributeDescriptions = VkVertex::GetAttributeDescriptions();
 	
 		vertexInputInfo.vertexBindingDescriptionCount = 1; 
 		vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
@@ -980,16 +1035,19 @@ namespace Vulkan_Renderer
 			renderPassInfo.pClearValues = &clearColor;
 	
 			vkCmdBeginRenderPass(vkCommandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-			vkCmdBindPipeline(vkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, vkGraphicsPipeline);
+				vkCmdBindPipeline(vkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, vkGraphicsPipeline);
 	
-			VkBuffer vertexBuffers[] = { vkVertexBuffer };
-			VkDeviceSize offsets[] = { 0 };
-			vkCmdBindVertexBuffers(vkCommandBuffers[i], 0, 1, vertexBuffers, offsets);
-			vkCmdBindIndexBuffer(vkCommandBuffers[i], vkIndexBuffer, 0, VK_INDEX_TYPE_UINT16);
-			vkCmdBindDescriptorSets(vkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, vkPipelineLayout, 0, 1, &vkDescriptorSet, 0, nullptr);
+				VkBuffer vertexBuffers[] = { vkVertexBuffer };
+				VkDeviceSize offsets[] = { 0 };
+				vkCmdBindVertexBuffers(vkCommandBuffers[i], 0, 1, vertexBuffers, offsets);
+
+				vkCmdBindIndexBuffer(vkCommandBuffers[i], vkIndexBuffer, 0, VK_INDEX_TYPE_UINT16);
+				vkCmdBindDescriptorSets(vkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, vkPipelineLayout, 0, 1, &vkDescriptorSets[i], 0, nullptr);
 	
-			vkCmdDrawIndexed(vkCommandBuffers[i], static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
-			//vkCmdDraw(vkCommandBuffers[i], static_cast<uint32_t>(vertices.size()), 1, 0, 0);
+				std::vector<Entity*> entities = hzEngine->GetEntityManager()->FindEntitiesByType<Model>();
+				for(int j = 0; j < entities.size(); j++)
+					vkCmdDrawIndexed(vkCommandBuffers[i], static_cast<uint16_t>(entities[j]->GetComponent<Model>().GetIndices()->size()), 1, 0, 0, 0);
+				//vkCmdDraw(vkCommandBuffers[i], static_cast<uint32_t>(vertices.size()), 1, 0, 0);
 	
 			vkCmdEndRenderPass(vkCommandBuffers[i]);
 	
@@ -997,6 +1055,7 @@ namespace Vulkan_Renderer
 			IS_VK_SUCCESS(vk_result, "Failed to Record Command Buffer!");
 		}
 	
+		vkRebuildBuffers = false;
 		return vk_result;
 	}
 	

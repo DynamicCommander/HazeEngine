@@ -12,7 +12,9 @@
 #pragma once
 
 #include "stdafx.h"
+
 #include "CSystem.h"
+#include "VkVertex.h"
 
 #include "Haze_Functions_STD.h"
 
@@ -40,38 +42,6 @@ namespace Vulkan_Renderer
 		std::vector<VkPresentModeKHR>	presentModes;
 	};
 
-	struct Vertex
-	{
-		vec3 v_pos;
-		vec3 v_color;
-
-		static VkVertexInputBindingDescription GetBindingDescription()
-		{
-			VkVertexInputBindingDescription bindingDescription = {};
-			bindingDescription.binding = 0;
-			bindingDescription.stride = sizeof(Vertex);
-			bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-			return bindingDescription;
-		}
-
-		static std::array<VkVertexInputAttributeDescription, 2> GetAttributeDescriptions()
-		{
-			std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions = {};
-
-			attributeDescriptions[0].binding = 0;
-			attributeDescriptions[0].location = 0;
-			attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-			attributeDescriptions[0].offset = offsetof(Vertex, v_pos);
-
-			attributeDescriptions[1].binding = 0;
-			attributeDescriptions[1].location = 1;
-			attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-			attributeDescriptions[1].offset = offsetof(Vertex, v_color);
-
-			return attributeDescriptions;
-		}
-	};
-
 	struct UniformBufferObject
 	{
 		mat4 model;
@@ -97,34 +67,8 @@ namespace Vulkan_Renderer
 
 		float						GetAspectRatio();																//Calculates Aspect Ratio
 
-		//const std::vector<Vertex> triangleVertices = 
-		//{
-		//	{ { 0.0f, -0.5f },{ 1.0f, 1.0f, 1.0f } },
-		//	{ { 0.5f, 0.5f },{ 0.0f, 1.0f, 0.0f } },
-		//	{ { -0.5f, 0.5f },{ 0.0f, 0.0f, 1.0f } }
-		//};
-
-		const std::vector<Vertex> vertices =
-		{
-			{ {-1.0f, -1.0f, -1.0f}	,{1.0f, 0.0f, 0.0f} },
-			{ {1.0f, -1.0f, -1.0f}	,{0.0f, 1.0f, 0.0f} },
-			{ {1.0f, 1.0f, -1.0f}	,{0.0f, 0.0f, 1.0f} },
-			{ {-1.0f, 1.0f, -1.0f}	,{1.0f, 1.0f, 1.0f} },
-			{ {-1.0f, -1.0f, 1.0f}	,{1.0f, 0.0f, 0.0f} },
-			{ {1.0f, -1.0f, 1.0f}	,{0.0f, 1.0f, 0.0f} },
-			{ {1.0f, 1.0f, 1.0f}	,{0.0f, 0.0f, 1.0f} },
-			{ {-1.0f, 1.0f, 1.0f}	,{1.0f, 1.0f, 1.0f} }
-		};	//Temporary Triangle
-
-		const std::vector<uint16_t> indices =
-		{
-			0, 1, 3, 3, 1, 2,
-			1, 5, 2, 2, 5, 6,
-			5, 4, 6, 6, 4, 7,
-			4, 0, 7, 7, 0, 3,
-			3, 2, 7, 7, 2, 6,
-			4, 5, 0, 0, 5, 1
-		};
+		void						SetVkRebuildBuffers(bool _vkRebuildBuffers) { vkRebuildBuffers = _vkRebuildBuffers; }//Set Rebuild Buffers
+		bool						GetVkRebuildBuffers() { return vkRebuildBuffers; }
 
 	private:
 
@@ -177,14 +121,16 @@ namespace Vulkan_Renderer
 		VkDeviceMemory				vkVertexBufferMemory;															//Allocated Memory Dedicated to Vertex buffer
 		VkBuffer					vkIndexBuffer;																	//Index Buffer, contains index information 
 		VkDeviceMemory				vkIndexBufferMemory;															//Allocated Memory Dedicated to Index Buffer
-		VkBuffer					vkUniformBuffer;																//Uniform Buffer, used for uniform data transfer to shaders
-		VkDeviceMemory				vkUniformBufferMemory;															//Allocated Memory Dedicated to Uniform Buffer
+		std::vector<VkBuffer>		vkUniformBuffers;																//Uniform Buffer, used for uniform data transfer to shaders
+		std::vector<VkDeviceMemory>	vkUniformBuffersMemory;															//Allocated Memory Dedicated to Uniform Buffer
 		VkDescriptorPool			vkDescriptorPool;																//Descriptor Pool
-		VkDescriptorSet				vkDescriptorSet;																//Descriptor Set
+		std::vector<VkDescriptorSet>vkDescriptorSets;																//Descriptor Set
+		bool						vkRebuildBuffers;																//Reminds Vulkan to Rebuild Vertex, Index, and Uniform Buffers
 
 		VkResult					CreateBuffer(VkDeviceSize _deviceSize, VkBufferUsageFlags _usageFlags, VkMemoryPropertyFlags _propertyFlags, VkBuffer& _buffer, VkDeviceMemory& _bufferMemory); //General buffer creation function
 		VkResult					CopyBuffer(VkBuffer _srcBuffer, VkBuffer _destBuffer, VkDeviceSize _size);		//Copies buffer information from src to dest
-		void						UpdateUniformBuffer(float _deltaTime);											//Updates uniform buffer every frame
+		void						UpdateUniformBuffer(uint32_t _currentImage);											//Updates uniform buffer every frame
+
 
 		VkResult					CreateVertexBuffer();															//Create Vertex Buffer
 		VkResult					CreateIndexBuffer();															//Create Index Buffer
@@ -192,6 +138,7 @@ namespace Vulkan_Renderer
 		VkResult					CreateDescriptorPool();															//Create Descriptor Pool
 		VkResult					CreateDescriptorSet();															//Create Descriptor Set
 		uint32_t					FindMemoryType(uint32_t _typeFilter, VkMemoryPropertyFlags _properties);
+
 		////////////////////////////////////////VULKAN BUFFER MEMBERS AND FUNCTIONS////////////////////////////////////////
 
 
@@ -235,7 +182,6 @@ namespace Vulkan_Renderer
 
 		void						CreateGlfwWindow();																//Creates OGL window
 		static void					OnWindowResized(GLFWwindow* _window, int _width, int _height);					//Recreates Swap Chain after window resize
-
 		////////////////////////////////////////OPENGL MEMBERS AND FUNCTIONS////////////////////////////////////////
 
 		const std::vector<const char*> deviceExtensions = { "VK_KHR_swapchain" };

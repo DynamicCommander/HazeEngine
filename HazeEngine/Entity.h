@@ -32,9 +32,6 @@ namespace ECS
 		const Entity_ID								GetEntityKey()	{ return ENTITY_KEY; }
 		const std::string							GetEntityName() { return entityName; }
 
-		template< class ComponentType, typename...Args>
-		void										AddComponent(Args&&..._params);
-
 		template< class ComponentType>
 		void										AddComponent(ComponentType* _component);
 
@@ -52,6 +49,9 @@ namespace ECS
 		template< class ComponentType >
 		int											RemoveComponents();
 
+		template< class ComponentType >
+		bool										Contains();
+
 	private:
 
 		Entity_ID		ENTITY_KEY;
@@ -59,18 +59,6 @@ namespace ECS
 
 		std::vector< std::unique_ptr< Component> > components;
 	};
-
-	template< class ComponentType, typename... Args >
-	void Entity::AddComponent(Args&&... _params) 
-	{
-		Haze_Functions_STD::console(this->entityName);
-		Haze_Functions_STD::console("Add Component: ");
-		Haze_Functions_STD::console(typeid(ComponentType).name());
-
-		dynamic_cast<Component*>(_params)->owner = this;
-
-		components.emplace_back(std::make_unique< ComponentType >(std::forward< Args >(_params)...));
-	}
 
 	template< class ComponentType >
 	void Entity::AddComponent(ComponentType* _component)
@@ -89,7 +77,7 @@ namespace ECS
 	{
 		for (auto && component : components) 
 		{
-			if (component->IsClassType(ComponentType::Type))
+			if (component->isClassType(ComponentType::Type))
 				return *static_cast< ComponentType * >(component.get());
 		}
 
@@ -160,6 +148,18 @@ namespace ECS
 		} while (success);
 
 		return numRemoved;
+	}
+
+	template< class ComponentType >
+	bool Entity::Contains()
+	{
+		for (auto && component : components)
+		{
+			if (component->isClassType(ComponentType::Type))
+				return true;
+		}
+
+		return false;
 	}
 }
 
