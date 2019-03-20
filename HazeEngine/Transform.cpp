@@ -12,17 +12,17 @@ namespace Haze_Engine
 
 	void Transform::Translate(vec3 _direction)
 	{
+		translationMatrix = translate(translationMatrix, _direction);
+		worldPosition = translationMatrix[3];
+		/*
 		mat4 t = translate(mat4(1.0f), _direction);
 		worldPosition += vec3(t[3]);
+		*/
 	}
 
 	void Transform::Translate(float _x, float _y, float _z)
 	{
-		vec3 direction = vec3();
-		direction.x += _x;
-		direction.y += _y;
-		direction.z += _z;
-		Translate(direction);
+		Translate(vec3(_x,_y,_z));
 	}
 
 	void Transform::Rotate(vec3 _rotation)
@@ -44,24 +44,18 @@ namespace Haze_Engine
 
 	void Transform::Scale(vec3 _scale)
 	{
+		scaleMatrix = scale(scaleMatrix, _scale);
 		worldScale += _scale;
 	}
 
 	void Transform::Scale(float _x, float _y, float _z)
 	{
-		worldScale.x += _x;
-		worldScale.y += _y;
-		worldScale.z += _z;
-	}
-
-	mat4 Transform::CalculateTranslationMatrix()
-	{
-		translationMatrix = translate(mat4(1.0), worldPosition);
-		return translationMatrix;
+		Scale(vec3(_x, _y, _z));
 	}
 
 	mat4 Transform::CalculateRotationMatrix()
 	{
+		rotationMatrix = mat4(worldRotation);
 		return rotationMatrix;
 	}
 
@@ -75,18 +69,12 @@ namespace Haze_Engine
 
 	void Transform::CalculateRight()
 	{
-		if (up.length() == NAN)
-			up = vec3(0.0f, 1.0f, 0.0f);
-
-		right = cross(forward, vec3(0,1,0));
+		right = normalize(cross(forward, vec3(0,1.0f,0)));
 	}
 
 	void Transform::CalculateUp()
 	{
-		if (right.length() <= 0.0f)
-			right = vec3(1.0f, 0.0f, 0.0f);
-
-		up = cross(forward, right);
+		up = normalize(cross(right, forward));
 	}
 
 }

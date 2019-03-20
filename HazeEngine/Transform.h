@@ -15,6 +15,8 @@ namespace Haze_Engine
 	{
 	public:
 
+		Transform() : Component(){ }
+
 		Transform(ECS::Entity* _owner) : Component(_owner) 
 		{ 
 			parent = nullptr;
@@ -33,7 +35,7 @@ namespace Haze_Engine
 			right = normalize(vec3(1.0f, 0.0f, 0.0f));
 			up = normalize(vec3(0.0f, 1.0f, 0.0f));
 
-			translationMatrix = mat4();
+			translationMatrix = mat4(1.0f);
 			rotationMatrix = mat4(1.0f);
 		};
 
@@ -75,7 +77,10 @@ namespace Haze_Engine
 		void WorldScale(vec3 _worldScale) { worldScale = _worldScale; }
 		void WorldScale(float _x, float _y, float _z) { worldScale = vec3(_x, _y, _z); }
 
-		mat4 CalculateTranslationMatrix();
+		mat4 GetTranslationMatrix() { return translationMatrix; }
+		mat4 GetRotationMatrix() { return rotationMatrix; }
+		mat4 GetScaleMatrix() { return scaleMatrix; }
+
 		mat4 CalculateRotationMatrix();
 
 		void CalculateFront();																
@@ -110,6 +115,7 @@ namespace Haze_Engine
 
 		mat4 translationMatrix;
 		mat4 rotationMatrix;
+		mat4 scaleMatrix;
 
 	private:
 

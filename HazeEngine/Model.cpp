@@ -22,13 +22,13 @@ namespace Haze_Engine
 		SetVertices(&temp);
 	}
 
-	mat4 Model::BuildMVPMatrix()
+	mat4 Model::BuildModelMatrix()
 	{
 		Haze_Functions_STD::console("Model: ");
 		Haze_Functions_STD::console(owner->GetComponent<Transform>().GetWorldPosition());
-		mat4 view = HazeEngine::Instance()->GetCamera()->GetViewMatrix();
-		mat4 proj = HazeEngine::Instance()->GetCamera()->GetProjMatrix();
-		modelViewProjection = proj * view * owner->GetComponent<Transform>().CalculateTranslationMatrix();
-		return modelViewProjection;
+
+		Transform t = owner->GetComponent<Transform>();
+		modelMatrix = t.GetTranslationMatrix() * t.GetRotationMatrix() * t.GetScaleMatrix();
+		return modelMatrix;
 	}
 }

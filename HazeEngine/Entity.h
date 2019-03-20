@@ -35,8 +35,6 @@ namespace ECS
 		template< class ComponentType>
 		void										AddComponent(ComponentType* _component);
 
-		void										AddComponent(Component* _component);
-
 		template< class ComponentType>
 		ComponentType&								GetComponent();
 

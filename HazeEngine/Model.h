@@ -15,6 +15,11 @@ namespace Haze_Engine
 
 	public:
 
+		Model(Active_Renderer _rendererType) : Component()
+		{
+			rendererType = _rendererType;
+		}
+
 		Model(Active_Renderer _rendererType, Entity* _owner) : Component(_owner)
 		{
 			owner = _owner;
@@ -38,8 +43,8 @@ namespace Haze_Engine
 		std::vector<uint16_t>* GetIndices() { return indices; }
 		void SetIndices(std::vector<uint16_t> *_indices) { indices = _indices; }
 
-
-		mat4 BuildMVPMatrix();
+		mat4 GetModelMatrix() { return modelMatrix;  }
+		mat4 BuildModelMatrix();
 
 	private:
 		CLASS_DECLARATION(Model)
@@ -49,7 +54,7 @@ namespace Haze_Engine
 		std::vector<Vertex> *vertices;
 		std::vector<uint16_t> *indices;
 
-		mat4 modelViewProjection;
+		mat4 modelMatrix;
 	};
 }
 #endif

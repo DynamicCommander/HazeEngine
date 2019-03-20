@@ -376,7 +376,7 @@ namespace Vulkan_Renderer
 		for (int i = 0; i < entities.size(); i++)
 		{
 			UniformBufferObject ubo = {};
-			ubo.model = entities[i]->GetComponent<Model>().BuildMVPMatrix();
+			ubo.model = entities[i]->GetComponent<Model>().BuildModelMatrix();
 			ubo.proj = HazeEngine::Instance()->GetCamera()->GetProjMatrix();
 			ubo.view = HazeEngine::Instance()->GetCamera()->GetViewMatrix();
 			ubo.proj[1][1] *= -1;
@@ -406,7 +406,7 @@ namespace Vulkan_Renderer
 		void* data;
 		for (int i = 0; i < entities.size(); i++)
 		{
-			vkMapMemory(vkLogicalDevice, stagingBufferMemory, 0, sizeof(VkVertex) * i, bufferSize, &data);
+			vkMapMemory(vkLogicalDevice, stagingBufferMemory, i, sizeof(VkVertex) * i, bufferSize, &data);
 			memcpy(data, entities[i]->GetComponent<Model>().GetVertices()->data(), (size_t)bufferSize);
 			vkUnmapMemory(vkLogicalDevice, stagingBufferMemory);
 		}

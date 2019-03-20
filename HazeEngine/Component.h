@@ -30,9 +30,11 @@ bool childclass::isClassType(const std::size_t classType) const							\
 
 	class Component
 	{
+		friend class Entity;
 
 	public:
 
+		Component();
 		Component(Entity* _owner);
 		Component(std::string && initialValue);
 

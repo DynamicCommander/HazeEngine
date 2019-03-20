@@ -31,9 +31,4 @@ namespace ECS
 
 	}
 
-	void Entity::AddComponent(Component* _component)
-	{
-		components.emplace_back(_component);
-	}
-
 }

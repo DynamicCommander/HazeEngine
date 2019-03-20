@@ -26,6 +26,8 @@ namespace Haze_Engine
 
 	public:
 
+		HazeCam() : Transform() { }
+
 		HazeCam(ECS::Entity* _owner) : Transform(_owner) 
 		{
 			this->viewMatrix = mat4();

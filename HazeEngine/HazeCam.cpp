@@ -29,7 +29,7 @@ namespace Haze_Engine
 		origin = vec3(0.0f, 0.0f, 0.0f);
 
 		LocalPosition(0.0f, 0.0f, 0.0f);
-		WorldPosition(0.0f, 0.0f, 3.0f);
+		WorldPosition(0.0f, 0.0f, -3.0f);
 
 		CalculateFront();
 		CalculateRight();
@@ -41,6 +41,7 @@ namespace Haze_Engine
 
 	void HazeCam::hzCameraUpdate(float _deltaTime)
 	{
+		deltaTime = _deltaTime;
 		Haze_Functions_STD::console(worldPosition);
 		Haze_Functions_STD::console(forward);
 		UpdateViewMatrix();
@@ -58,6 +59,7 @@ namespace Haze_Engine
 
 	void HazeCam::MoveLeft()
 	{
+		right = GetRight();
 		Translate(-normalize(GetRight() * cameraMoveSpeed * deltaTime));
 	}
 
