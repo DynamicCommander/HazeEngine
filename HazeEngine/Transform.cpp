@@ -14,10 +14,6 @@ namespace Haze_Engine
 	{
 		translationMatrix = translate(translationMatrix, _direction);
 		worldPosition = translationMatrix[3];
-		/*
-		mat4 t = translate(mat4(1.0f), _direction);
-		worldPosition += vec3(t[3]);
-		*/
 	}
 
 	void Transform::Translate(float _x, float _y, float _z)
@@ -33,7 +29,7 @@ namespace Haze_Engine
 
 	void Transform::Rotate(float _x, float _y, float _z)
 	{
-		//Rotate(vec3(_x, _y, _z));
+		Rotate(vec3(_x, _y, _z));
     }
 
 	void Transform::Rotate(float _angleByRadians, vec3 _rotation)
@@ -45,7 +41,7 @@ namespace Haze_Engine
 	void Transform::Scale(vec3 _scale)
 	{
 		scaleMatrix = scale(scaleMatrix, _scale);
-		worldScale += _scale;
+		//worldScale += _scale;
 	}
 
 	void Transform::Scale(float _x, float _y, float _z)
@@ -69,7 +65,7 @@ namespace Haze_Engine
 
 	void Transform::CalculateRight()
 	{
-		right = normalize(cross(forward, vec3(0,1.0f,0)));
+		right = normalize(cross(forward, vec3(0.0f, 1.0f, 0.0f)));
 	}
 
 	void Transform::CalculateUp()

@@ -95,8 +95,10 @@ namespace Vulkan_Renderer
 			CreateVertexBuffer();
 			CreateIndexBuffer();
 			CreateCommandBuffers();
+			vkRebuildBuffers = false;
 		}
 
+		Render();
 		SetVkrWindowClose(glfwWindowShouldClose(glfwWindow));
 	}
 
@@ -406,7 +408,7 @@ namespace Vulkan_Renderer
 		void* data;
 		for (int i = 0; i < entities.size(); i++)
 		{
-			vkMapMemory(vkLogicalDevice, stagingBufferMemory, i, sizeof(VkVertex) * i, bufferSize, &data);
+			vkMapMemory(vkLogicalDevice, stagingBufferMemory, sizeof(VkVertex) * i, bufferSize, 0, &data);
 			memcpy(data, entities[i]->GetComponent<Model>().GetVertices()->data(), (size_t)bufferSize);
 			vkUnmapMemory(vkLogicalDevice, stagingBufferMemory);
 		}
@@ -420,7 +422,6 @@ namespace Vulkan_Renderer
 		vkDestroyBuffer(vkLogicalDevice, stagingBuffer, nullptr);
 		vkFreeMemory(vkLogicalDevice, stagingBufferMemory, nullptr);
 
-		vkRebuildBuffers = false;
 		return vk_result;
 	}
 
@@ -453,7 +454,6 @@ namespace Vulkan_Renderer
 		vkDestroyBuffer(vkLogicalDevice, stagingBuffer, nullptr);
 		vkFreeMemory(vkLogicalDevice, stagingBufferMemory, nullptr);
 
-		vkRebuildBuffers = false;
 		return vk_result;
 	}
 
@@ -1054,7 +1054,6 @@ namespace Vulkan_Renderer
 			IS_VK_SUCCESS(vk_result, "Failed to Record Command Buffer!");
 		}
 
-		vkRebuildBuffers = false;
 		return vk_result;
 	}
 

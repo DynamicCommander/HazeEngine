@@ -37,6 +37,7 @@ namespace Haze_Engine
 
 			translationMatrix = mat4(1.0f);
 			rotationMatrix = mat4(1.0f);
+			scaleMatrix = mat4(1.0f);
 		};
 
 		~Transform();
@@ -58,8 +59,8 @@ namespace Haze_Engine
 
 		void LocalPosition(vec3 _localPosition) { localPosition = _localPosition; }
 		void LocalPosition(float _x, float _y, float _z) { localPosition = vec3(_x, _y, _z); }
-		void WorldPosition(vec3 _worldPosition) { worldPosition = _worldPosition; }
-		void WorldPosition(float _x, float _y, float _z) { worldPosition = vec3(_x, _y, _z); }
+		void WorldPosition(vec3 _worldPosition) { worldPosition = _worldPosition; translationMatrix[3] = vec4(_worldPosition, 1.0f); }
+		void WorldPosition(float _x, float _y, float _z) { worldPosition = vec3(_x, _y, _z); translationMatrix[3] = vec4(_x, _y, _z, 1.0f); }
 		
 		quat GetLocalRotation()	{ return quat(localRotation); }
 		quat GetWorldRotation() { return quat(worldRotation); }

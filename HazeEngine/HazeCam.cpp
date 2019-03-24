@@ -97,7 +97,7 @@ namespace Haze_Engine
 		vec3 worldPosition = GetWorldPosition();
 		vec3 forward = GetForward();
 		vec3 up = GetUp();
-		viewMatrix = lookAt(GetWorldPosition(), GetWorldPosition() + GetForward(), vec3(0,1,0));
+		viewMatrix = lookAt(GetWorldPosition(), GetWorldPosition() + GetForward(), vec3(0.0f ,1.0f, 0.0f));
 		//viewMatrix = lookAt(GetWorldPosition(), GetWorldPosition() + GetForward(), GetUp());
 		//CalculateTranslationMatrix();
 		//CalculateRotationMatrix();
