@@ -13,7 +13,7 @@ namespace Haze_Engine
 	Vertex::Vertex(vec3 _position, vec3 _color)
 	{
 		position = _position;
-		_color = _color;
+		color = _color;
 	}
 
 	Vertex::~Vertex()

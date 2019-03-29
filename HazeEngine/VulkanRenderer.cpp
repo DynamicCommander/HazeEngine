@@ -408,7 +408,7 @@ namespace Vulkan_Renderer
 		void* data;
 		for (int i = 0; i < entities.size(); i++)
 		{
-			vkMapMemory(vkLogicalDevice, stagingBufferMemory, sizeof(VkVertex) * i, bufferSize, 0, &data);
+			vkMapMemory(vkLogicalDevice, stagingBufferMemory, sizeof(VkVertex) * entities[i]->GetComponent<Model>().GetVertices()->size(), bufferSize, 0, &data);
 			memcpy(data, entities[i]->GetComponent<Model>().GetVertices()->data(), (size_t)bufferSize);
 			vkUnmapMemory(vkLogicalDevice, stagingBufferMemory);
 		}
@@ -440,7 +440,7 @@ namespace Vulkan_Renderer
 		void* data;
 		for (int i = 0; i < entities.size(); i++)
 		{
-			vkMapMemory(vkLogicalDevice, stagingBufferMemory, sizeof(uint16_t) * i, bufferSize, 0, &data);
+			vkMapMemory(vkLogicalDevice, stagingBufferMemory, sizeof(uint16_t) * entities[i]->GetComponent<Model>().GetVertices()->size(), bufferSize, 0, &data);
 			memcpy(data, entities[i]->GetComponent<Model>().GetIndices()->data(), (size_t)bufferSize);
 			vkUnmapMemory(vkLogicalDevice, stagingBufferMemory);
 		}
