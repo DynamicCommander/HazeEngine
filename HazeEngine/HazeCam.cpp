@@ -22,10 +22,8 @@ namespace Haze_Engine
 	{
 	}
 
-	void HazeCam::hzCameraInit(HazeEngine* _hzEngine)
+	void HazeCam::Initialize()
 	{
-		hzEngine = _hzEngine;
-
 		origin = vec3(0.0f, 0.0f, 0.0f);
 
 		LocalPosition(0.0f, 0.0f, 0.0f);
@@ -39,49 +37,46 @@ namespace Haze_Engine
 		SetPerspective();
 	}
 
-	void HazeCam::hzCameraUpdate(float _deltaTime)
+	void HazeCam::Update(float _deltaTime)
 	{
-		deltaTime = _deltaTime;
-		Haze_Functions_STD::console(worldPosition);
-		Haze_Functions_STD::console(forward);
+		Transform::Update(_deltaTime);
 		UpdateViewMatrix();
 	}
 
 	void HazeCam::MoveForward()
 	{
-		Translate(GetForward() * cameraMoveSpeed * deltaTime);
+		Translate(GetForward() * cameraMoveSpeed * HazeEngine::Instance()->DeltaTime());
 	}
 
 	void HazeCam::MoveBackward()
 	{
-		Translate(-GetForward() * cameraMoveSpeed * deltaTime);
+		Translate(-GetForward() * cameraMoveSpeed * HazeEngine::Instance()->DeltaTime());
 	}
 
 	void HazeCam::MoveLeft()
 	{
-		right = GetRight();
-		Translate(-normalize(GetRight() * cameraMoveSpeed * deltaTime));
+		Translate(-normalize(GetRight() * cameraMoveSpeed * HazeEngine::Instance()->DeltaTime()));
 	}
 
 	void HazeCam::MoveRight()
 	{
-		Translate(normalize(GetRight() * cameraMoveSpeed * deltaTime));
+		Translate(normalize(GetRight() * cameraMoveSpeed * HazeEngine::Instance()->DeltaTime()));
 	}
 
 	void HazeCam::MoveVerticalPos()
 	{
-		Translate(vec3(0.0f, 1.0f, 0.0f) * cameraMoveSpeed * deltaTime);
+		Translate(vec3(0.0f, 1.0f, 0.0f) * cameraMoveSpeed * HazeEngine::Instance()->DeltaTime());
 	}
 
 	void HazeCam::MoveVerticalNeg()
 	{
-		Translate(vec3(0.0f, -1.0f, 0.0f) * cameraMoveSpeed * deltaTime);
+		Translate(vec3(0.0f, -1.0f, 0.0f) * cameraMoveSpeed * HazeEngine::Instance()->DeltaTime());
 	}
 
 	void HazeCam::YawPitchRoll(float _yawRadians, float _pitchRadians, float _rollRadians)
 	{
-		yaw += radians(_yawRadians * hzEngine->GetInput()->GetMouseXSensitivity());
-		pitch += radians(_pitchRadians * hzEngine->GetInput()->GetMouseYSensitivity());
+		yaw += _yawRadians;
+		pitch += _pitchRadians;
 		roll += _rollRadians;
 
 		clamp(pitch, -89.0f, 89.0f);
@@ -94,13 +89,6 @@ namespace Haze_Engine
 
 	void HazeCam::UpdateViewMatrix()
 	{
-		vec3 worldPosition = GetWorldPosition();
-		vec3 forward = GetForward();
-		vec3 up = GetUp();
-		viewMatrix = lookAt(GetWorldPosition(), GetWorldPosition() + GetForward(), vec3(0.0f ,1.0f, 0.0f));
-		//viewMatrix = lookAt(GetWorldPosition(), GetWorldPosition() + GetForward(), GetUp());
-		//CalculateTranslationMatrix();
-		//CalculateRotationMatrix();
-		//viewMatrix = translationMatrix * rotationMatrix;
+		viewMatrix = lookAt(GetWorldPosition(), GetWorldPosition() + GetForward(), vec3(0.0f , 1.0f, 0.0f));
 	}
 }

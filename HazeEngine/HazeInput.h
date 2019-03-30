@@ -24,7 +24,7 @@ namespace Haze_Engine
 		HazeInput();
 		~HazeInput();
 
-		void Initialize(HazeEngine* _engine);
+		void Initialize();
 		void Update(float _deltaTime);
 		void ShutDown();
 
@@ -39,7 +39,6 @@ namespace Haze_Engine
 	private:
 
 		////////////////////////////////////////HAZE INPUT MEMBERS///////////////////////////////////////////
-		Haze_Engine::HazeEngine *	hzEngine;																//Haze Engine Reference
 
 		float						mouseXSensitivity = 1.0f;												//Mouse X Speed
 		float						mouseYSensitivity = 1.0f;												//Mouse Y Speed

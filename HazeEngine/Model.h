@@ -36,6 +36,9 @@ namespace Haze_Engine
 
 		~Model();
 
+		void Initialize();
+		void Update(float _deltaTime);
+
 		std::vector<Vertex>* GetVertices() { return vertices; }
 		void SetVertices(std::vector<Vertex> *_vertices);
 		void SetVertices(std::vector<VkVertex> *_vertices);

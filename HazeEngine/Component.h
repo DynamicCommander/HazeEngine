@@ -40,6 +40,9 @@ bool childclass::isClassType(const std::size_t classType) const							\
 
 		~Component();
 
+		virtual void Initialize() = 0;
+		virtual void Update(float _deltaTime) = 0;
+
 		static const std::size_t Type;
 		virtual bool isClassType(const std::size_t classType) const 
 		{

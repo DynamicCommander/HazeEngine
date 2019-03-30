@@ -29,6 +29,8 @@ namespace ECS
 
 		~Entity();
 
+		void Update(float _deltaTime);
+
 		const Entity_ID								GetEntityKey()	{ return ENTITY_KEY; }
 		const std::string							GetEntityName() { return entityName; }
 
@@ -55,7 +57,7 @@ namespace ECS
 		Entity_ID		ENTITY_KEY;
 		std::string		entityName;
 
-		std::vector< std::unique_ptr< Component> > components;
+		std::vector< std::unique_ptr<Component> > components;
 	};
 
 	template< class ComponentType >

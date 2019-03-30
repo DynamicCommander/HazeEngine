@@ -11,6 +11,16 @@ namespace Haze_Engine
 	{
 	}
 
+	void Model::Initialize()
+	{
+
+	}
+
+	void Model::Update(float _deltaTime)
+	{
+
+	}
+
 	void Model::SetVertices(std::vector<Vertex>* _vertices)
 	{ 
 		vertices = _vertices; 
@@ -24,9 +34,6 @@ namespace Haze_Engine
 
 	mat4 Model::BuildModelMatrix()
 	{
-		Haze_Functions_STD::console("Model: ");
-		Haze_Functions_STD::console(owner->GetComponent<Transform>().GetWorldPosition());
-
 		Transform t = owner->GetComponent<Transform>();
 		modelMatrix = t.GetTranslationMatrix() * t.GetRotationMatrix() * t.GetScaleMatrix();
 		return modelMatrix;

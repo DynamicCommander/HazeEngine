@@ -42,6 +42,9 @@ namespace Haze_Engine
 
 		~Transform();
 
+		void Initialize();
+		void Update(float _deltaTime);
+
 		void Translate(vec3 _direction);
 		void Translate(float _x, float _y, float _z);
 

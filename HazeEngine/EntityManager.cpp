@@ -21,14 +21,15 @@ namespace ECS
 
 	}
 
-	void EntityManager::Initialize(Haze_Engine::HazeEngine* _engine)
+	void EntityManager::Initialize()
 	{
-		hzEngine = _engine;
+
 	}
 
 	void EntityManager::Update(float _deltaTime)
 	{
-
+		for (int i = 0; i < entities.size(); i++)
+			entities[i]->Update(_deltaTime);
 	}
 
 	void EntityManager::ShutDown()
@@ -38,10 +39,10 @@ namespace ECS
 
 	Entity* EntityManager::CreateEntity(std::string _entityName)
 	{
-		currentEntityID++;
-
 		Entity* newEntity = new Entity(currentEntityID, _entityName);
 		entities.insert( std::pair<Entity_ID, Entity*>(currentEntityID, newEntity) );
+
+		currentEntityID++;
 		return newEntity;
 	}
 

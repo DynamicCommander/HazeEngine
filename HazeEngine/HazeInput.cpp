@@ -22,9 +22,9 @@ namespace Haze_Engine
 	{
 	}
 
-	void HazeInput::Initialize(HazeEngine* _engine)
+	void HazeInput::Initialize()
 	{
-		hzEngine = _engine;
+
 	}
 
 	void HazeInput::Update(float _deltaTime)
@@ -39,28 +39,28 @@ namespace Haze_Engine
 
 	void HazeInput::hzTakeKeyInput(int _key)
 	{
+		HazeCam camera = HazeEngine::Instance()->GetEntityManager()->FindEntityByType<HazeCam>()->GetComponent<HazeCam>();
+		
 		if (_key == GLFW_KEY_W)
-			this->hzEngine->GetCamera()->MoveForward();
+			camera.MoveForward();
 		else if (_key == GLFW_KEY_S)
-			hzEngine->GetCamera()->MoveBackward();
+			camera.MoveBackward();
 		else if (_key == GLFW_KEY_A)
-			hzEngine->GetCamera()->MoveLeft();
+			camera.MoveLeft();
 		else if (_key == GLFW_KEY_D)
-			hzEngine->GetCamera()->MoveRight();
+			camera.MoveRight();
 		else if (_key == GLFW_KEY_Q)
-			hzEngine->GetCamera()->MoveVerticalNeg();
+			camera.MoveVerticalNeg();
 		else if (_key == GLFW_KEY_E)
-			hzEngine->GetCamera()->MoveVerticalPos();
+			camera.MoveVerticalPos();
 		else if (_key == GLFW_KEY_ESCAPE)
-			hzEngine->GetVulkanRenderer()->ShutDown();
+			HazeEngine::Instance()->GetVulkanRenderer()->ShutDown();
 		else if (_key == GLFW_KEY_SPACE)
-			hzEngine->GetCamera()->WorldPosition(0, 0, 0);
+			camera.WorldPosition(0, 0, 0);
 	}
 
 	void HazeInput::hzTakeMouseDirectionInput(GLFWwindow* _window, double _mouseX, double _mouseY)
 	{
-		//glfwGetCursorPos(_window, &_mouseX, &_mouseY);
-
 		if (bufferFirstMouse)
 		{
 			oldMousePosition.x = _mouseX;
@@ -70,8 +70,10 @@ namespace Haze_Engine
 
 		float xoffset = _mouseX - oldMousePosition.x;
 		float yoffset = oldMousePosition.y - _mouseY;
-		oldMousePosition = vec2(xoffset, yoffset);
 
-		hzEngine->GetCamera()->YawPitchRoll(xoffset, yoffset, 0.0f);
+		oldMousePosition = vec2(xoffset, yoffset);
+		glfwSetCursorPos(_window, 0, 0);
+
+		HazeEngine::Instance()->GetEntityManager()->FindEntityByType<HazeCam>()->GetComponent<HazeCam>().YawPitchRoll(xoffset * mouseXSensitivity, -yoffset * mouseYSensitivity, 0.0f);
 	}
 }

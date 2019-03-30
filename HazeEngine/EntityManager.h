@@ -25,7 +25,7 @@ namespace ECS
 		EntityManager();
 		~EntityManager();
 
-		void Initialize(Haze_Engine::HazeEngine* _engine);
+		void Initialize();
 		void Update(float _deltaTime);
 		void ShutDown();
 
@@ -43,8 +43,6 @@ namespace ECS
 		std::vector<Entity*> FindEntitiesByType();
 
 	private:
-		Haze_Engine::HazeEngine * hzEngine;
-
 		int currentEntityID = 0;
 		std::map<Entity_ID, Entity*> entities;
 	};

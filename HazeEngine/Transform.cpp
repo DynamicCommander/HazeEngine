@@ -10,10 +10,23 @@ namespace Haze_Engine
 
 	}
 
+	void Transform::Initialize()
+	{
+		
+	}
+
+	void Transform::Update(float _deltaTime)
+	{
+
+	}
+
 	void Transform::Translate(vec3 _direction)
 	{
 		translationMatrix = translate(translationMatrix, _direction);
 		worldPosition = translationMatrix[3];
+
+		Haze_Functions_STD::console(worldPosition);
+		Haze_Functions_STD::console(GetWorldPosition());
 	}
 
 	void Transform::Translate(float _x, float _y, float _z)
@@ -41,7 +54,7 @@ namespace Haze_Engine
 	void Transform::Scale(vec3 _scale)
 	{
 		scaleMatrix = scale(scaleMatrix, _scale);
-		//worldScale += _scale;
+		worldScale += _scale;
 	}
 
 	void Transform::Scale(float _x, float _y, float _z)

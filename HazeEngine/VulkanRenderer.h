@@ -60,7 +60,7 @@ namespace Vulkan_Renderer
 		const bool					IsWindowClose() { return vkrWindowClose; };										//Is the GLFW window closed?	
 		GLFWwindow*					GetGLFWWindow() { return glfwWindow; }											//Return the GLFW window
 
-		void						Initialize(HazeEngine* _engine);												//Initialize
+		void						Initialize();												//Initialize
 		void						Update(float _deltaTime);														//Update
 		void						ShutDown();																		//Shutdown
 		void						Render();																		//Vulkan Render, renders all buffers to window
@@ -71,8 +71,6 @@ namespace Vulkan_Renderer
 		bool						GetVkRebuildBuffers() { return vkRebuildBuffers; }
 
 	private:
-
-		HazeEngine*		hzEngine;
 
 		////////////////////////////////////////VULKAN INSTANCE MEMBERS AND FUNCTIONS////////////////////////////////////////
 		VkInstance					vkInstance;																		//Vulkan Instance
@@ -130,7 +128,6 @@ namespace Vulkan_Renderer
 		VkResult					CreateBuffer(VkDeviceSize _deviceSize, VkBufferUsageFlags _usageFlags, VkMemoryPropertyFlags _propertyFlags, VkBuffer& _buffer, VkDeviceMemory& _bufferMemory); //General buffer creation function
 		VkResult					CopyBuffer(VkBuffer _srcBuffer, VkBuffer _destBuffer, VkDeviceSize _size);		//Copies buffer information from src to dest
 		void						UpdateUniformBuffer(uint32_t _currentImage);					//Updates uniform buffer every frame
-
 
 		VkResult					CreateVertexBuffer();															//Create Vertex Buffer
 		VkResult					CreateIndexBuffer();															//Create Index Buffer

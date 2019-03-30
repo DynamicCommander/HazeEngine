@@ -30,8 +30,8 @@ namespace Haze_Engine
 
 		HazeCam(ECS::Entity* _owner) : Transform(_owner) 
 		{
-			this->viewMatrix = mat4();
-			this->perspectiveMatrix = mat4();
+			this->viewMatrix = mat4(1.0f);
+			this->perspectiveMatrix = mat4(1.0f);
 		};
 
 		CLASS_DECLARATION(HazeCam)
@@ -39,8 +39,8 @@ namespace Haze_Engine
 		~HazeCam();
 
 		////////////////////////////////////////HAZE CAMERA ROUTINES//////////////////////////////////////////
-		void			hzCameraInit(HazeEngine* _hzEngine);												//Camera Initialization
-		void			hzCameraUpdate(float _deltaTime);													//Camera Update
+		void			Initialize();																		//Camera Initialization
+		void			Update(float _deltaTime);															//Camera Update
 
 		void			MoveForward();																		//Move in camera direction
 		void			MoveBackward();																		//Move in opposite camera direction
@@ -57,14 +57,12 @@ namespace Haze_Engine
 		////////////////////////////////////////HAZE CAMERA ROUTINES//////////////////////////////////////////
 
 		////////////////////////////////////////HAZE CAMERA MEMBERS///////////////////////////////////////////
-		float			cameraMoveSpeed = 3.0f;																//Camera Move Speed
+		float			cameraMoveSpeed = 300.0f;																//Camera Move Speed
 		////////////////////////////////////////HAZE CAMERA MEMBERS///////////////////////////////////////////
                                                                                   
 	private:
 
 		////////////////////////////////////////HAZE CAMERA MEMBERS///////////////////////////////////////////
-		HazeEngine *	hzEngine;
-
 		vec3			origin;																				//Origin point in world (0,0,0)
 
 		mat4			perspectiveMatrix;																	//Matrix built from FOV, Near, and Far planes
@@ -73,8 +71,6 @@ namespace Haze_Engine
 		float			fieldOfView = 60.0f;																//FOV
 		float			zNear = .01f;																		//Near clipping plane distance
 		float			zFar = 100.0f;																		//Far clipping plane distance
-
-		float			deltaTime = 0.0f;																	//delta time between frames
 		////////////////////////////////////////HAZE CAMERA MEMBERS///////////////////////////////////////////
 
 		////////////////////////////////////////HAZE CAMERA ROUTINES//////////////////////////////////////////

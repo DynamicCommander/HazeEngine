@@ -31,4 +31,10 @@ namespace ECS
 
 	}
 
+	void Entity::Update(float _deltaTime)
+	{
+		for (int i = 0; i < components.size(); i++)
+			components[i].get()->Update(_deltaTime);
+	}
+
 }

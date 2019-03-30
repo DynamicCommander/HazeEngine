@@ -19,7 +19,7 @@ namespace Haze_Engine
 		CSystem();
 		virtual ~CSystem();
 
-		virtual void Initialize(HazeEngine* _engine) = 0;
+		virtual void Initialize() = 0;
 		virtual void Update(float _deltaTime) = 0;
 		virtual void ShutDown() = 0;
 	};

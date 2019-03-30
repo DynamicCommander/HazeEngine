@@ -31,4 +31,5 @@ namespace ECS
 	Component::~Component()
 	{
 	}
+
 }

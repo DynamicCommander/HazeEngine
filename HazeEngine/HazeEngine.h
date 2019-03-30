@@ -30,13 +30,14 @@ using namespace ECS;
 
 namespace Haze_Engine
 {
+
 	enum Active_Renderer { DIRECTX, VULKAN, OPENGL };
 
 	class HazeEngine
 	{
 	protected:
 		////////////////////////////////////////HAZE ENGINE MEMBERS//////////////////////////////////////////
-		HazeCam*		camera;																				//Haze Camera, allows the user to move through the scene
+		//HazeCam*		camera;																				//Haze Camera, allows the user to move through the scene
 		HazeInput*		input;																				//Haze Input, takes input from user and applies functionality to various classes
 
 		VulkanRenderer* vkr;																				//Vulkan Renderer Object, renders objects to screen.
@@ -59,7 +60,7 @@ namespace Haze_Engine
 		////////////////////////////////////////HAZE ENGINE SINGLETON INSTANCE//////////////////////////////////////////
 
 		////////////////////////////////////////HAZE ENGINE MEMBERS//////////////////////////////////////////
-		HazeCam*					GetCamera( )				{ return this->camera; }						//Public access to Camera Object.
+		//HazeCam*					GetCamera( )				{ return this->camera; }						//Public access to Camera Object.
 		HazeInput*					GetInput( )				{ return this->input; }							//Public access to Input Object
 		VulkanRenderer*				GetVulkanRenderer( )		{ return this->vkr; }							//Public access to Vulkan Renderer
 		EntityManager*				GetEntityManager( )		{ return this->entityManager; }					//Public acceess to Entity Manager
@@ -76,6 +77,7 @@ namespace Haze_Engine
 		T*							FindSystemByType(T _system);
 
 		const bool					IsShutDown( ) { return shutDown; }										//Status of Engine
+		const float					DeltaTime() { return deltaTime; }
 		////////////////////////////////////////HAZE ENGINE ROUTINES//////////////////////////////////////////
 	
 	private:

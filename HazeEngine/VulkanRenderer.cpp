@@ -64,10 +64,9 @@ namespace Vulkan_Renderer
 		glfwTerminate();
 	}
 
-	void VulkanRenderer::Initialize(HazeEngine* _engine)
+	void VulkanRenderer::Initialize()
 	{
 		VkResult vk_result;
-		hzEngine = _engine;
 		CreateGlfwWindow();
 		vk_result = CreateVkInstance(VK_STRUCTURE_TYPE_APPLICATION_INFO, "Vulkan Renderer", 0, "Haze Engine", 0, VK_API_VERSION_1_0);
 		SetupDebugCallback();
@@ -373,14 +372,15 @@ namespace Vulkan_Renderer
 	void VulkanRenderer::UpdateUniformBuffer(uint32_t _currentImage)
 	{
 		std::vector<Entity*> entities = HazeEngine::Instance()->GetEntityManager()->FindEntitiesByType<Model>();
+		HazeCam camera = HazeEngine::Instance()->GetEntityManager()->FindEntityByType<HazeCam>()->GetComponent<HazeCam>();
 
 		void* data;
 		for (int i = 0; i < entities.size(); i++)
 		{
 			UniformBufferObject ubo = {};
 			ubo.model = entities[i]->GetComponent<Model>().BuildModelMatrix();
-			ubo.proj = HazeEngine::Instance()->GetCamera()->GetProjMatrix();
-			ubo.view = HazeEngine::Instance()->GetCamera()->GetViewMatrix();
+			ubo.proj = camera.GetProjMatrix();
+			ubo.view = camera.GetViewMatrix();
 			ubo.proj[1][1] *= -1;
 
 			vkMapMemory(vkLogicalDevice, vkUniformBuffersMemory[_currentImage], sizeof(UniformBufferObject) * i, sizeof(ubo), 0, &data);
@@ -408,8 +408,12 @@ namespace Vulkan_Renderer
 		void* data;
 		for (int i = 0; i < entities.size(); i++)
 		{
-			vkMapMemory(vkLogicalDevice, stagingBufferMemory, sizeof(VkVertex) * entities[i]->GetComponent<Model>().GetVertices()->size(), bufferSize, 0, &data);
-			memcpy(data, entities[i]->GetComponent<Model>().GetVertices()->data(), (size_t)bufferSize);
+			Model model = entities[i]->GetComponent<Model>();
+			size_t modelVertAllocation = sizeof(VkVertex) * model.GetVertices()->size();
+			size_t offset = sizeof(VkVertex) * model.GetVertices()->size() * i;
+
+			vkMapMemory(vkLogicalDevice, stagingBufferMemory, offset, modelVertAllocation, 0, &data);
+			memcpy(data, model.GetVertices()->data(), (size_t)modelVertAllocation);
 			vkUnmapMemory(vkLogicalDevice, stagingBufferMemory);
 		}
 
@@ -430,7 +434,11 @@ namespace Vulkan_Renderer
 		VkResult vk_result;
 
 		std::vector<Entity*> entities = HazeEngine::Instance()->GetEntityManager()->FindEntitiesByType<Model>();
-		VkDeviceSize bufferSize = sizeof(uint16_t) * entities.size();
+		VkDeviceSize bufferSize = 0;
+		for (int i = 0; i < entities.size(); i++)
+		{
+			bufferSize += sizeof(VkVertex) * entities[i]->GetComponent<Model>().GetIndices()->size();
+		}
 
 		VkBuffer stagingBuffer;
 		VkDeviceMemory stagingBufferMemory;
@@ -440,8 +448,12 @@ namespace Vulkan_Renderer
 		void* data;
 		for (int i = 0; i < entities.size(); i++)
 		{
-			vkMapMemory(vkLogicalDevice, stagingBufferMemory, sizeof(uint16_t) * entities[i]->GetComponent<Model>().GetVertices()->size(), bufferSize, 0, &data);
-			memcpy(data, entities[i]->GetComponent<Model>().GetIndices()->data(), (size_t)bufferSize);
+			Model model = entities[i]->GetComponent<Model>();
+			size_t modelIndexAllocation = sizeof(VkVertex) * model.GetIndices()->size();
+			size_t offset = sizeof(VkVertex) * model.GetIndices()->size() * i;
+
+			vkMapMemory(vkLogicalDevice, stagingBufferMemory, offset, modelIndexAllocation, 0, &data);
+			memcpy(data, entities[i]->GetComponent<Model>().GetIndices()->data(), (size_t)modelIndexAllocation);
 			vkUnmapMemory(vkLogicalDevice, stagingBufferMemory);
 		}
 
@@ -1043,7 +1055,7 @@ namespace Vulkan_Renderer
 			vkCmdBindIndexBuffer(vkCommandBuffers[i], vkIndexBuffer, 0, VK_INDEX_TYPE_UINT16);
 			vkCmdBindDescriptorSets(vkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, vkPipelineLayout, 0, 1, &vkDescriptorSets[i], 0, nullptr);
 
-			std::vector<Entity*> entities = hzEngine->GetEntityManager()->FindEntitiesByType<Model>();
+			std::vector<Entity*> entities = HazeEngine::Instance()->GetEntityManager()->FindEntitiesByType<Model>();
 			for (int j = 0; j < entities.size(); j++)
 				vkCmdDrawIndexed(vkCommandBuffers[i], static_cast<uint16_t>(entities[j]->GetComponent<Model>().GetIndices()->size()), 1, 0, 0, 0);
 			//vkCmdDraw(vkCommandBuffers[i], static_cast<uint32_t>(vertices.size()), 1, 0, 0);
