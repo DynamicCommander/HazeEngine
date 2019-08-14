@@ -15,6 +15,10 @@ namespace Haze_Functions_STD
 {
 #pragma region ////////////////////////////////////////HAZE ENGINE HELPER FUNCTIONS////////////////////////////////////////
 
+#define WORLD_FORWARD vec3(0,0,1)
+#define WORLD_UP vec3(0,1,0)
+#define WORLD_RIGHT vec3(1,0,0)
+
 	//cleaner NULL checks
 	inline bool null(void* _object)
 	{

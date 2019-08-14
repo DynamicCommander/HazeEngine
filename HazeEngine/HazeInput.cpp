@@ -10,6 +10,7 @@ Generic Input class for Haze Engine
 #include "stdafx.h"
 #include "HazeInput.h"
 #include "HazeEngine.h"
+#include "Model.h"
 
 namespace Haze_Engine
 {
@@ -39,24 +40,24 @@ namespace Haze_Engine
 
 	void HazeInput::hzTakeKeyInput(int _key)
 	{
-		HazeCam camera = HazeEngine::Instance()->GetEntityManager()->FindEntityByType<HazeCam>()->GetComponent<HazeCam>();
+		HazeCam* camera = &HazeEngine::Instance()->GetEntityManager()->FindEntityByType<HazeCam>()->GetComponent<HazeCam>();
 		
 		if (_key == GLFW_KEY_W)
-			camera.MoveForward();
+			camera->MoveForward();
 		else if (_key == GLFW_KEY_S)
-			camera.MoveBackward();
+			camera->MoveBackward();
 		else if (_key == GLFW_KEY_A)
-			camera.MoveLeft();
+			camera->MoveLeft();
 		else if (_key == GLFW_KEY_D)
-			camera.MoveRight();
+			camera->MoveRight();
 		else if (_key == GLFW_KEY_Q)
-			camera.MoveVerticalNeg();
+			camera->MoveVerticalNeg();
 		else if (_key == GLFW_KEY_E)
-			camera.MoveVerticalPos();
+			camera->MoveVerticalPos();
 		else if (_key == GLFW_KEY_ESCAPE)
 			HazeEngine::Instance()->GetVulkanRenderer()->ShutDown();
 		else if (_key == GLFW_KEY_SPACE)
-			camera.WorldPosition(0, 0, 0);
+			camera->WorldPosition(0, 0, 0);
 	}
 
 	void HazeInput::hzTakeMouseDirectionInput(GLFWwindow* _window, double _mouseX, double _mouseY)

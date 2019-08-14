@@ -26,7 +26,7 @@ namespace Haze_Engine
 			worldPosition = vec3(0.0f, 0.0f, 0.0f);
 
 			localRotation = quat(1.0f, 0.0f, 0.0f, 0.0f);
-			worldRotation = quat(1.0f, 0.0f, 0.0f, 0.0f);
+			worldRotation = quat(1.0f, 0.0f, 1.0f, 0.0f);
 
 			localScale = vec3(1.0f, 1.0f, 1.0f);
 			worldScale = vec3(1.0f, 1.0f, 1.0f);
@@ -45,14 +45,13 @@ namespace Haze_Engine
 		void Initialize();
 		void Update(float _deltaTime);
 
-		void Translate(vec3 _direction);
-		void Translate(float _x, float _y, float _z);
+		void Translate(vec3 _direction, bool _isWorld = true);
+		void Translate(float _x, float _y, float _z, bool _isWorld = true);
 
-		void Rotate(vec3 _rotation);
-		void Rotate(float _x, float _y, float _z);
-		void Rotate(float _x, float _y, float _z, float _w);
-
-		void Rotate(float _angleByRadians, vec3 _rotationAxis);
+		void Rotate(vec3 _rotationbool, bool _isWorld = true);
+		void Rotate(float _x, float _y, float _z, bool _isWorld = true);
+		void Rotate(float _x, float _y, float _z, float _w, bool _isWorld = true);
+		void Rotate(float _angleByRadians, vec3 _rotationAxis, bool _isWorld = true);
 
 		void Scale(vec3 _scale);
 		void Scale(float _x, float _y, float _z);
@@ -62,8 +61,8 @@ namespace Haze_Engine
 
 		void LocalPosition(vec3 _localPosition) { localPosition = _localPosition; }
 		void LocalPosition(float _x, float _y, float _z) { localPosition = vec3(_x, _y, _z); }
-		void WorldPosition(vec3 _worldPosition) { worldPosition = _worldPosition; translationMatrix[3] = vec4(_worldPosition, 1.0f); }
-		void WorldPosition(float _x, float _y, float _z) { worldPosition = vec3(_x, _y, _z); translationMatrix[3] = vec4(_x, _y, _z, 1.0f); }
+		void WorldPosition(vec3 _worldPosition) { worldPosition = _worldPosition; }
+		void WorldPosition(float _x, float _y, float _z) { worldPosition = vec3(_x, _y, _z); }
 		
 		quat GetLocalRotation()	{ return quat(localRotation); }
 		quat GetWorldRotation() { return quat(worldRotation); }
@@ -81,19 +80,17 @@ namespace Haze_Engine
 		void WorldScale(vec3 _worldScale) { worldScale = _worldScale; }
 		void WorldScale(float _x, float _y, float _z) { worldScale = vec3(_x, _y, _z); }
 
-		mat4 GetTranslationMatrix() { return translationMatrix; }
-		mat4 GetRotationMatrix() { return rotationMatrix; }
-		mat4 GetScaleMatrix() { return scaleMatrix; }
+		mat4 GetTranslationMatrix() { return CalculateTranslationMatrix(); }
+		mat4 GetRotationMatrix() { return CalculateRotationMatrix(); }
+		mat4 GetScaleMatrix() { return CalculateScaleMatrix(); }
 
+		mat4 CalculateTranslationMatrix();
 		mat4 CalculateRotationMatrix();
+		mat4 CalculateScaleMatrix();
 
-		void CalculateFront();																
-		void CalculateRight();																
-		void CalculateUp();																	
+		void CalculateFront();																															
 
 		vec3 GetForward()	{ CalculateFront(); return forward; }
-		vec3 GetRight()		{ CalculateRight(); return right; }
-		vec3 GetUp()		{ CalculateUp(); return up; }
 
 		Transform*	GetParent() { return parent; }
 		void		SetParent(Transform* _parent) { parent = _parent; }
@@ -120,6 +117,8 @@ namespace Haze_Engine
 		mat4 translationMatrix;
 		mat4 rotationMatrix;
 		mat4 scaleMatrix;
+
+		bool isDirty = false;
 
 	private:
 

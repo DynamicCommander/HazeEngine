@@ -28,10 +28,7 @@ namespace Haze_Engine
 
 		LocalPosition(0.0f, 0.0f, 0.0f);
 		WorldPosition(0.0f, 0.0f, -3.0f);
-
-		CalculateFront();
-		CalculateRight();
-		CalculateUp();
+		WorldRotation(0.0f, 0.0f, 1.0f, 0);
 
 		glfwSetInputMode(HazeEngine::Instance()->GetVulkanRenderer()->GetGLFWWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		SetPerspective();
@@ -45,32 +42,32 @@ namespace Haze_Engine
 
 	void HazeCam::MoveForward()
 	{
-		Translate(GetForward() * cameraMoveSpeed * HazeEngine::Instance()->DeltaTime());
+		Translate((cameraMoveSpeed * WORLD_FORWARD * HazeEngine::Instance()->DeltaTime()) *GetWorldRotation());
 	}
 
 	void HazeCam::MoveBackward()
 	{
-		Translate(-GetForward() * cameraMoveSpeed * HazeEngine::Instance()->DeltaTime());
+		Translate((cameraMoveSpeed * -WORLD_FORWARD * HazeEngine::Instance()->DeltaTime()) * GetWorldRotation());
 	}
 
 	void HazeCam::MoveLeft()
 	{
-		Translate(-normalize(GetRight() * cameraMoveSpeed * HazeEngine::Instance()->DeltaTime()));
+		Translate((cameraMoveSpeed * -WORLD_RIGHT * HazeEngine::Instance()->DeltaTime()) * GetWorldRotation());
 	}
 
 	void HazeCam::MoveRight()
 	{
-		Translate(normalize(GetRight() * cameraMoveSpeed * HazeEngine::Instance()->DeltaTime()));
+		Translate((cameraMoveSpeed * WORLD_RIGHT * HazeEngine::Instance()->DeltaTime()) * GetWorldRotation());
 	}
 
 	void HazeCam::MoveVerticalPos()
 	{
-		Translate(vec3(0.0f, 1.0f, 0.0f) * cameraMoveSpeed * HazeEngine::Instance()->DeltaTime());
+		Translate((cameraMoveSpeed * WORLD_UP) * HazeEngine::Instance()->DeltaTime());
 	}
 
 	void HazeCam::MoveVerticalNeg()
 	{
-		Translate(vec3(0.0f, -1.0f, 0.0f) * cameraMoveSpeed * HazeEngine::Instance()->DeltaTime());
+		Translate((cameraMoveSpeed * -WORLD_UP) * HazeEngine::Instance()->DeltaTime());
 	}
 
 	void HazeCam::YawPitchRoll(float _yawRadians, float _pitchRadians, float _rollRadians)
@@ -78,6 +75,9 @@ namespace Haze_Engine
 		yaw += _yawRadians;
 		pitch += _pitchRadians;
 		roll += _rollRadians;
+
+		Rotate(pitch, WORLD_RIGHT);
+		Rotate(yaw, WORLD_UP);
 
 		clamp(pitch, -89.0f, 89.0f);
 	}

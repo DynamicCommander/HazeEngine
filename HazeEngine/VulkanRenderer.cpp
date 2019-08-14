@@ -372,15 +372,15 @@ namespace Vulkan_Renderer
 	void VulkanRenderer::UpdateUniformBuffer(uint32_t _currentImage)
 	{
 		std::vector<Entity*> entities = HazeEngine::Instance()->GetEntityManager()->FindEntitiesByType<Model>();
-		HazeCam camera = HazeEngine::Instance()->GetEntityManager()->FindEntityByType<HazeCam>()->GetComponent<HazeCam>();
+		HazeCam* camera = &HazeEngine::Instance()->GetEntityManager()->FindEntityByType<HazeCam>()->GetComponent<HazeCam>();
 
 		void* data;
 		for (int i = 0; i < entities.size(); i++)
 		{
 			UniformBufferObject ubo = {};
 			ubo.model = entities[i]->GetComponent<Model>().BuildModelMatrix();
-			ubo.proj = camera.GetProjMatrix();
-			ubo.view = camera.GetViewMatrix();
+			ubo.proj = camera->GetProjMatrix();
+			ubo.view = camera->GetViewMatrix();
 			ubo.proj[1][1] *= -1;
 
 			vkMapMemory(vkLogicalDevice, vkUniformBuffersMemory[_currentImage], sizeof(UniformBufferObject) * i, sizeof(ubo), 0, &data);
