@@ -31,6 +31,7 @@ namespace Haze_Functions_STD
 	inline void console(char * _param) { cout << _param << endl; }
 	inline void console(string _param) { cout << _param << endl; }
 	inline void console(int	_param) { cout << _param << endl; }
+	inline void console(float _param) { cout << _param << endl; }
 	inline void console(vec3	_param) { cout << "X: " << _param.x << " , " << "Y: " << _param.y << " , " << "Z: " << _param.z << endl; }
 	inline void console(quat	_param) { cout << "X: " << _param.x << " , " << "Y: " << _param.y << " , " << "Z: " << _param.z << " , " << "W: " << _param.w << endl; }
 

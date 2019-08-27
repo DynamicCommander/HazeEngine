@@ -40,7 +40,8 @@ namespace Haze_Engine
 
 	void HazeInput::hzTakeKeyInput(int _key)
 	{
-		HazeCam* camera = &HazeEngine::Instance()->GetEntityManager()->FindEntityByType<HazeCam>()->GetComponent<HazeCam>();
+		HazeCam* camera = HazeEngine::Instance()->GetEntityManager()->FindEntityByType<HazeCam>()->GetComponent<HazeCam>();
+		Transform* cube = HazeEngine::Instance()->GetEntityManager()->FindEntityByType<Model>()->GetComponent<Transform>();
 		
 		if (_key == GLFW_KEY_W)
 			camera->MoveForward();
@@ -75,6 +76,6 @@ namespace Haze_Engine
 		oldMousePosition = vec2(xoffset, yoffset);
 		glfwSetCursorPos(_window, 0, 0);
 
-		HazeEngine::Instance()->GetEntityManager()->FindEntityByType<HazeCam>()->GetComponent<HazeCam>().YawPitchRoll(xoffset * mouseXSensitivity, -yoffset * mouseYSensitivity, 0.0f);
+		HazeEngine::Instance()->GetEntityManager()->FindEntityByType<HazeCam>()->GetComponent<HazeCam>()->YawPitchRoll(xoffset * mouseXSensitivity, -yoffset * mouseYSensitivity, 0.0f);
 	}
 }

@@ -25,13 +25,12 @@ namespace Haze_Engine
 			localPosition = vec3(0.0f, 0.0f, 0.0f);
 			worldPosition = vec3(0.0f, 0.0f, 0.0f);
 
-			localRotation = quat(1.0f, 0.0f, 0.0f, 0.0f);
-			worldRotation = quat(1.0f, 0.0f, 1.0f, 0.0f);
+			localRotation = vec3(0.0f, 0.0f, 0.0f);
+			worldRotation = vec3(0.0f, 1.0f, 0.0f);
 
 			localScale = vec3(1.0f, 1.0f, 1.0f);
 			worldScale = vec3(1.0f, 1.0f, 1.0f);
 
-			forward = normalize(vec3(0.0f, 0.0f, 1.0f));
 			right = normalize(vec3(1.0f, 0.0f, 0.0f));
 			up = normalize(vec3(0.0f, 1.0f, 0.0f));
 
@@ -50,8 +49,6 @@ namespace Haze_Engine
 
 		void Rotate(vec3 _rotationbool, bool _isWorld = true);
 		void Rotate(float _x, float _y, float _z, bool _isWorld = true);
-		void Rotate(float _x, float _y, float _z, float _w, bool _isWorld = true);
-		void Rotate(float _angleByRadians, vec3 _rotationAxis, bool _isWorld = true);
 
 		void Scale(vec3 _scale);
 		void Scale(float _x, float _y, float _z);
@@ -64,13 +61,13 @@ namespace Haze_Engine
 		void WorldPosition(vec3 _worldPosition) { worldPosition = _worldPosition; }
 		void WorldPosition(float _x, float _y, float _z) { worldPosition = vec3(_x, _y, _z); }
 		
-		quat GetLocalRotation()	{ return quat(localRotation); }
-		quat GetWorldRotation() { return quat(worldRotation); }
+		vec3 GetLocalRotation() { return localRotation; }
+		vec3 GetWorldRotation() { return worldRotation; }
 
-		void LocalRotation(quat _localRotation) { localRotation = _localRotation; }
-		void LocalRotation(float _x, float _y, float _z, float _w) { localRotation = quat(_w, _x, _y, _z); }
-		void WorldRotation(quat _worldRotation) { worldRotation = _worldRotation; }
-		void WorldRotation(float _x, float _y, float _z, float _w) { worldRotation = quat(_w, _x, _y, _z); }
+		void LocalRotation(vec3 _localRotation) { localRotation = _localRotation; }
+		void LocalRotation(float _x, float _y, float _z, float _w) { localRotation = vec3(_x, _y, _z); }
+		void WorldRotation(vec3 _worldRotation) { worldRotation = _worldRotation; }
+		void WorldRotation(float _x, float _y, float _z, float _w) { worldRotation = vec3(_x, _y, _z); }
 
 		vec3 GetLocalScale()	{ return localScale; }
 		vec3 GetWorldScale()	{ return worldScale; }
@@ -88,31 +85,32 @@ namespace Haze_Engine
 		mat4 CalculateRotationMatrix();
 		mat4 CalculateScaleMatrix();
 
-		void CalculateFront();																															
+		void CalculateAxis();			
 
-		vec3 GetForward()	{ CalculateFront(); return forward; }
+		vec3 GetForward()	{ CalculateAxis(); return worldRotation; }
+		vec3 GetUp() { return up; }
+		vec3 GetRight() { return right; }
 
 		Transform*	GetParent() { return parent; }
 		void		SetParent(Transform* _parent) { parent = _parent; }
 
 	protected:
 
-		vec3					localPosition;
-		vec3					worldPosition;
-
-		quat					localRotation;
-		quat					worldRotation;
-
-		vec3					localScale;
-		vec3					worldScale;
-
-		vec3					forward;
-		vec3					right;
-		vec3					up;
-
-		float					yaw;
-		float					pitch;
-		float					roll;
+		vec3 localPosition;
+		vec3 worldPosition;
+			 
+		vec3 localRotation;
+		vec3 worldRotation;
+			 
+		vec3 localScale;
+		vec3 worldScale;
+			
+		vec3 right;
+		vec3 up;
+			  
+		float yaw;
+		float pitch;
+		float roll;
 
 		mat4 translationMatrix;
 		mat4 rotationMatrix;

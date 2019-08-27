@@ -23,7 +23,7 @@ namespace Haze_Engine
 		Model(Active_Renderer _rendererType, Entity* _owner) : Component(_owner)
 		{
 			owner = _owner;
-			if (Haze_Functions_STD::null(&owner->GetComponent<Transform>()))
+			if (Haze_Functions_STD::null(owner->GetComponent<Transform>()))
 			{
 				Transform t = Transform(owner);
 				owner->AddComponent<Transform>(&t);

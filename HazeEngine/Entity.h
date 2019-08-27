@@ -37,8 +37,8 @@ namespace ECS
 		template< class ComponentType>
 		void										AddComponent(ComponentType* _component);
 
-		template< class ComponentType>
-		ComponentType&								GetComponent();
+		template< class ComponentType >
+		ComponentType*								GetComponent();
 
 		template< class ComponentType >
 		std::vector< ComponentType * >				GetComponents();
@@ -73,15 +73,15 @@ namespace ECS
 	}
 
 	template< class ComponentType >
-	ComponentType & Entity::GetComponent() 
+	ComponentType * Entity::GetComponent() 
 	{
 		for (auto && component : components) 
 		{
 			if (component->isClassType(ComponentType::Type))
-				return *static_cast< ComponentType * >(component.get());
+				return static_cast< ComponentType * >(component.get());
 		}
 
-		return *std::unique_ptr< ComponentType >(nullptr);
+		return nullptr;
 	}
 
 	template< class ComponentType >

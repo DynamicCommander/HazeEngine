@@ -34,8 +34,8 @@ namespace Haze_Engine
 
 	mat4 Model::BuildModelMatrix()
 	{
-		Transform t = owner->GetComponent<Transform>();
-		modelMatrix = t.GetTranslationMatrix() * t.GetRotationMatrix() * t.GetScaleMatrix();
+		Transform* t = owner->GetComponent<Transform>();
+		modelMatrix = t->GetTranslationMatrix() * t->GetRotationMatrix() * t->GetScaleMatrix();
 		return modelMatrix;
 	}
 }

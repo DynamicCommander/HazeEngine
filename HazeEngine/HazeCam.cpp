@@ -41,45 +41,43 @@ namespace Haze_Engine
 	}
 
 	void HazeCam::MoveForward()
-	{
-		Translate((cameraMoveSpeed * WORLD_FORWARD * HazeEngine::Instance()->DeltaTime()) *GetWorldRotation());
+	{	
+		Haze_Functions_STD::console(worldRotation);
+		Translate((cameraMoveSpeed * GetForward() * HazeEngine::Instance()->DeltaTime()) * GetWorldRotation());
 	}
 
 	void HazeCam::MoveBackward()
 	{
-		Translate((cameraMoveSpeed * -WORLD_FORWARD * HazeEngine::Instance()->DeltaTime()) * GetWorldRotation());
+		Translate((cameraMoveSpeed * -GetForward() * HazeEngine::Instance()->DeltaTime()) * GetWorldRotation());
 	}
 
 	void HazeCam::MoveLeft()
 	{
-		Translate((cameraMoveSpeed * -WORLD_RIGHT * HazeEngine::Instance()->DeltaTime()) * GetWorldRotation());
+		Translate((cameraMoveSpeed * -GetRight() * HazeEngine::Instance()->DeltaTime()) * GetWorldRotation());
 	}
 
 	void HazeCam::MoveRight()
 	{
-		Translate((cameraMoveSpeed * WORLD_RIGHT * HazeEngine::Instance()->DeltaTime()) * GetWorldRotation());
+		Translate((cameraMoveSpeed * GetRight() * HazeEngine::Instance()->DeltaTime()) * GetWorldRotation());
 	}
 
 	void HazeCam::MoveVerticalPos()
 	{
-		Translate((cameraMoveSpeed * WORLD_UP) * HazeEngine::Instance()->DeltaTime());
+		Translate((cameraMoveSpeed * GetUp()) * HazeEngine::Instance()->DeltaTime());
 	}
 
 	void HazeCam::MoveVerticalNeg()
 	{
-		Translate((cameraMoveSpeed * -WORLD_UP) * HazeEngine::Instance()->DeltaTime());
+		Translate((cameraMoveSpeed * -GetUp()) * HazeEngine::Instance()->DeltaTime());
 	}
 
 	void HazeCam::YawPitchRoll(float _yawRadians, float _pitchRadians, float _rollRadians)
 	{
-		yaw += _yawRadians;
-		pitch += _pitchRadians;
-		roll += _rollRadians;
+		yaw += _yawRadians * HazeEngine::Instance()->DeltaTime();
+		pitch += _pitchRadians * HazeEngine::Instance()->DeltaTime();
+		roll += _rollRadians * HazeEngine::Instance()->DeltaTime();
 
-		Rotate(pitch, WORLD_RIGHT);
-		Rotate(yaw, WORLD_UP);
-
-		clamp(pitch, -89.0f, 89.0f);
+		Haze_Functions_STD::clamp(pitch, -89.0f, 89.0f);
 	}
 
 	void HazeCam::SetPerspective()
@@ -89,6 +87,7 @@ namespace Haze_Engine
 
 	void HazeCam::UpdateViewMatrix()
 	{
-		viewMatrix = lookAt(GetWorldPosition(), GetWorldPosition() + GetForward(), vec3(0.0f , 1.0f, 0.0f));
+		CalculateAxis();
+		viewMatrix = lookAt(GetWorldPosition(), GetWorldPosition() + GetForward(), GetUp());
 	}
 }

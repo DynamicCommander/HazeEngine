@@ -39,9 +39,9 @@ namespace Haze_Engine
 	void Transform::Rotate(vec3 _rotation, bool _isWorld)
 	{
 		if (_isWorld)
-			worldRotation += quat(_rotation);
+			worldRotation += _rotation;
 		else
-			localRotation += quat(_rotation);
+			localRotation += _rotation;
 
 		isDirty = true;
 	}
@@ -51,16 +51,6 @@ namespace Haze_Engine
 		Rotate(vec3(_x, _y, _z), _isWorld);
 		isDirty = true;
     }
-
-	void Transform::Rotate(float _angleByRadians, vec3 _rotation, bool _isWorld)
-	{
-		if(_isWorld)
-			worldRotation = rotate(worldRotation, _angleByRadians, _rotation);
-		else
-			localRotation = rotate(worldRotation, _angleByRadians, _rotation);
-
-		isDirty = true;
-	}
 
 	void Transform::Scale(vec3 _scale)
 	{
@@ -86,9 +76,9 @@ namespace Haze_Engine
 	{
 		if(isDirty)
 		{
-			rotationMatrix = glm::rotate(glm::mat4(1.0f), worldRotation.x, WORLD_RIGHT);
-			rotationMatrix = glm::rotate(rotationMatrix, worldRotation.y, WORLD_RIGHT);
-			rotationMatrix = glm::rotate(rotationMatrix, worldRotation.z, WORLD_RIGHT);
+			rotationMatrix = glm::rotate(rotationMatrix, worldRotation.x, WORLD_RIGHT);
+			rotationMatrix = glm::rotate(rotationMatrix, worldRotation.y, WORLD_UP);
+			rotationMatrix = glm::rotate(rotationMatrix, worldRotation.z, WORLD_FORWARD);
 		}
 
 		return rotationMatrix;
@@ -97,19 +87,21 @@ namespace Haze_Engine
 	mat4 Transform::CalculateScaleMatrix()
 	{
 		if(isDirty)
-		{
 			scaleMatrix = glm::scale(glm::mat4(1.0f), worldScale);
-		}
 
 		return scaleMatrix;
 	}
 
-	void Transform::CalculateFront()
+	void Transform::CalculateAxis()
 	{
-		forward.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-		forward.y = sin(glm::radians(pitch));
-		forward.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-		forward = glm::normalize(forward);
+		worldRotation.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+		worldRotation.y = sin(glm::radians(pitch));
+		worldRotation.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+		worldRotation = glm::normalize(worldRotation);
+
+		right = cross(worldRotation, WORLD_UP);
+		up = cross(right, worldRotation);
+		
 	}
 
 }

@@ -372,13 +372,13 @@ namespace Vulkan_Renderer
 	void VulkanRenderer::UpdateUniformBuffer(uint32_t _currentImage)
 	{
 		std::vector<Entity*> entities = HazeEngine::Instance()->GetEntityManager()->FindEntitiesByType<Model>();
-		HazeCam* camera = &HazeEngine::Instance()->GetEntityManager()->FindEntityByType<HazeCam>()->GetComponent<HazeCam>();
+		HazeCam* camera = HazeEngine::Instance()->GetEntityManager()->FindEntityByType<HazeCam>()->GetComponent<HazeCam>();
 
 		void* data;
 		for (int i = 0; i < entities.size(); i++)
 		{
 			UniformBufferObject ubo = {};
-			ubo.model = entities[i]->GetComponent<Model>().BuildModelMatrix();
+			ubo.model = entities[i]->GetComponent<Model>()->BuildModelMatrix();
 			ubo.proj = camera->GetProjMatrix();
 			ubo.view = camera->GetViewMatrix();
 			ubo.proj[1][1] *= -1;
@@ -397,7 +397,7 @@ namespace Vulkan_Renderer
 		std::vector<Entity*> entities = HazeEngine::Instance()->GetEntityManager()->FindEntitiesByType<Model>();
 		for (int i = 0; i < entities.size(); i++)
 		{
-			bufferSize += sizeof(VkVertex) * entities[i]->GetComponent<Model>().GetVertices()->size();
+			bufferSize += sizeof(VkVertex) * entities[i]->GetComponent<Model>()->GetVertices()->size();
 		}
 
 		VkBuffer stagingBuffer;
@@ -408,12 +408,12 @@ namespace Vulkan_Renderer
 		void* data;
 		for (int i = 0; i < entities.size(); i++)
 		{
-			Model model = entities[i]->GetComponent<Model>();
-			size_t modelVertAllocation = sizeof(VkVertex) * model.GetVertices()->size();
-			size_t offset = sizeof(VkVertex) * model.GetVertices()->size() * i;
+			Model* model = entities[i]->GetComponent<Model>();
+			size_t modelVertAllocation = sizeof(VkVertex) * model->GetVertices()->size();
+			size_t offset = sizeof(VkVertex) * model->GetVertices()->size() * i;
 
 			vkMapMemory(vkLogicalDevice, stagingBufferMemory, offset, modelVertAllocation, 0, &data);
-			memcpy(data, model.GetVertices()->data(), (size_t)modelVertAllocation);
+			memcpy(data, model->GetVertices()->data(), (size_t)modelVertAllocation);
 			vkUnmapMemory(vkLogicalDevice, stagingBufferMemory);
 		}
 
@@ -437,7 +437,7 @@ namespace Vulkan_Renderer
 		VkDeviceSize bufferSize = 0;
 		for (int i = 0; i < entities.size(); i++)
 		{
-			bufferSize += sizeof(VkVertex) * entities[i]->GetComponent<Model>().GetIndices()->size();
+			bufferSize += sizeof(VkVertex) * entities[i]->GetComponent<Model>()->GetIndices()->size();
 		}
 
 		VkBuffer stagingBuffer;
@@ -448,12 +448,12 @@ namespace Vulkan_Renderer
 		void* data;
 		for (int i = 0; i < entities.size(); i++)
 		{
-			Model model = entities[i]->GetComponent<Model>();
-			size_t modelIndexAllocation = sizeof(VkVertex) * model.GetIndices()->size();
-			size_t offset = sizeof(VkVertex) * model.GetIndices()->size() * i;
+			Model* model = entities[i]->GetComponent<Model>();
+			size_t modelIndexAllocation = sizeof(VkVertex) * model->GetIndices()->size();
+			size_t offset = sizeof(VkVertex) * model->GetIndices()->size() * i;
 
 			vkMapMemory(vkLogicalDevice, stagingBufferMemory, offset, modelIndexAllocation, 0, &data);
-			memcpy(data, entities[i]->GetComponent<Model>().GetIndices()->data(), (size_t)modelIndexAllocation);
+			memcpy(data, entities[i]->GetComponent<Model>()->GetIndices()->data(), (size_t)modelIndexAllocation);
 			vkUnmapMemory(vkLogicalDevice, stagingBufferMemory);
 		}
 
@@ -1057,7 +1057,7 @@ namespace Vulkan_Renderer
 
 			std::vector<Entity*> entities = HazeEngine::Instance()->GetEntityManager()->FindEntitiesByType<Model>();
 			for (int j = 0; j < entities.size(); j++)
-				vkCmdDrawIndexed(vkCommandBuffers[i], static_cast<uint16_t>(entities[j]->GetComponent<Model>().GetIndices()->size()), 1, 0, 0, 0);
+				vkCmdDrawIndexed(vkCommandBuffers[i], static_cast<uint16_t>(entities[j]->GetComponent<Model>()->GetIndices()->size()), 1, 0, 0, 0);
 			//vkCmdDraw(vkCommandBuffers[i], static_cast<uint32_t>(vertices.size()), 1, 0, 0);
 
 			vkCmdEndRenderPass(vkCommandBuffers[i]);
