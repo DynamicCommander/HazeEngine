@@ -40,8 +40,8 @@ namespace Haze_Engine
 
 		////////////////////////////////////////HAZE INPUT MEMBERS///////////////////////////////////////////
 
-		float						mouseXSensitivity = 0.05f;												//Mouse X Speed
-		float						mouseYSensitivity = 0.05f;												//Mouse Y Speed
+		float						mouseXSensitivity = 0.005f;												//Mouse X Speed
+		float						mouseYSensitivity = 0.005f;												//Mouse Y Speed
 
 		vec2						oldMousePosition;														//Old mouse position, used to calculate new offset
 

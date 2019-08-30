@@ -17,8 +17,8 @@ namespace Haze_Engine
 
 		Transform() : Component(){ }
 
-		Transform(ECS::Entity* _owner) : Component(_owner) 
-		{ 
+		Transform(ECS::Entity* _owner) : Component(_owner)
+		{
 			parent = nullptr;
 			children = std::vector<Transform*>();
 
@@ -26,7 +26,7 @@ namespace Haze_Engine
 			worldPosition = vec3(0.0f, 0.0f, 0.0f);
 
 			localRotation = vec3(0.0f, 0.0f, 0.0f);
-			worldRotation = vec3(0.0f, 1.0f, 0.0f);
+			worldRotation = vec3(0.0f, 0.0f, 1.0f);
 
 			localScale = vec3(1.0f, 1.0f, 1.0f);
 			worldScale = vec3(1.0f, 1.0f, 1.0f);
@@ -49,6 +49,7 @@ namespace Haze_Engine
 
 		void Rotate(vec3 _rotationbool, bool _isWorld = true);
 		void Rotate(float _x, float _y, float _z, bool _isWorld = true);
+		void Rotate(float _radians, vec3 _aroundAxis);
 
 		void Scale(vec3 _scale);
 		void Scale(float _x, float _y, float _z);

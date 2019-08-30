@@ -70,7 +70,7 @@ namespace Haze_Engine
 
 		float			fieldOfView = 60.0f;																//FOV
 		float			zNear = .01f;																		//Near clipping plane distance
-		float			zFar = 100.0f;																		//Far clipping plane distance
+		float			zFar = 1000.0f;																		//Far clipping plane distance
 		////////////////////////////////////////HAZE CAMERA MEMBERS///////////////////////////////////////////
 
 		////////////////////////////////////////HAZE CAMERA ROUTINES//////////////////////////////////////////

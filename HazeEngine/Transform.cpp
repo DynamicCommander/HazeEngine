@@ -52,6 +52,11 @@ namespace Haze_Engine
 		isDirty = true;
     }
 
+	void Transform::Rotate(float _radians, vec3 _aroundAxis)
+	{
+		rotationMatrix = glm::rotate(rotationMatrix, _radians, _aroundAxis);
+	}
+
 	void Transform::Scale(vec3 _scale)
 	{
 		worldScale += _scale;
@@ -76,8 +81,8 @@ namespace Haze_Engine
 	{
 		if(isDirty)
 		{
-			rotationMatrix = glm::rotate(rotationMatrix, worldRotation.x, WORLD_RIGHT);
-			rotationMatrix = glm::rotate(rotationMatrix, worldRotation.y, WORLD_UP);
+			rotationMatrix = glm::rotate(rotationMatrix, worldRotation.x, WORLD_UP);
+			rotationMatrix = glm::rotate(rotationMatrix, worldRotation.y, WORLD_RIGHT);
 			rotationMatrix = glm::rotate(rotationMatrix, worldRotation.z, WORLD_FORWARD);
 		}
 
@@ -94,14 +99,9 @@ namespace Haze_Engine
 
 	void Transform::CalculateAxis()
 	{
-		worldRotation.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-		worldRotation.y = sin(glm::radians(pitch));
-		worldRotation.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-		worldRotation = glm::normalize(worldRotation);
-
-		right = cross(worldRotation, WORLD_UP);
-		up = cross(right, worldRotation);
-		
+		worldRotation = glm::inverse(rotationMatrix) * glm::vec4(0, 0, -1, 1);
+		right = glm::inverse(rotationMatrix) * glm::vec4(1, 0, 0, 1);
+		up = glm::inverse(rotationMatrix) * glm::vec4(0, 1, 0, 1);
 	}
 
 }

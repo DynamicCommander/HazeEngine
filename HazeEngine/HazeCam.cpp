@@ -37,12 +37,13 @@ namespace Haze_Engine
 	void HazeCam::Update(float _deltaTime)
 	{
 		Transform::Update(_deltaTime);
+		Haze_Functions_STD::console(worldRotation);
 		UpdateViewMatrix();
 	}
 
 	void HazeCam::MoveForward()
 	{	
-		Haze_Functions_STD::console(worldRotation);
+		
 		Translate((cameraMoveSpeed * GetForward() * HazeEngine::Instance()->DeltaTime()) * GetWorldRotation());
 	}
 
@@ -73,9 +74,14 @@ namespace Haze_Engine
 
 	void HazeCam::YawPitchRoll(float _yawRadians, float _pitchRadians, float _rollRadians)
 	{
+		Haze_Functions_STD::console(HazeEngine::Instance()->DeltaTime());
 		yaw += _yawRadians * HazeEngine::Instance()->DeltaTime();
 		pitch += _pitchRadians * HazeEngine::Instance()->DeltaTime();
 		roll += _rollRadians * HazeEngine::Instance()->DeltaTime();
+
+		Rotate(_yawRadians, WORLD_UP);
+		Rotate(_pitchRadians, WORLD_RIGHT);
+		Rotate(_rollRadians, WORLD_FORWARD);
 
 		Haze_Functions_STD::clamp(pitch, -89.0f, 89.0f);
 	}
