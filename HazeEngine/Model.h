@@ -25,8 +25,8 @@ namespace Haze_Engine
 			owner = _owner;
 			if (Haze_Functions_STD::null(owner->GetComponent<Transform>()))
 			{
-				Transform t = Transform(owner);
-				owner->AddComponent<Transform>(&t);
+				Transform* t = new Transform(owner);
+				owner->AddComponent<Transform>(t);
 			}
 			rendererType = _rendererType;
 			vertices = new std::vector<Vertex>();

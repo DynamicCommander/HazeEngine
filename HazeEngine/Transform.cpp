@@ -17,7 +17,8 @@ namespace Haze_Engine
 
 	void Transform::Update(float _deltaTime)
 	{
-
+		if (isDirty)
+			CalculateAxis();
 	}
 
 	void Transform::Translate(vec3 _direction, bool _isWorld)
@@ -38,7 +39,6 @@ namespace Haze_Engine
 
 	void Transform::Rotate(vec3 _rotation, bool _isWorld)
 	{
-		if()
 		if (_isWorld)
 			worldRotation += _rotation;
 		else

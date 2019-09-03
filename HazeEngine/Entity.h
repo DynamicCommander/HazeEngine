@@ -65,6 +65,7 @@ namespace ECS
 	{
 		Haze_Functions_STD::console(this->entityName);
 		Haze_Functions_STD::console("Add Component: ");
+		Haze_Functions_STD::console(this->ENTITY_KEY);
 		Haze_Functions_STD::console(typeid(ComponentType).name());
 
 		dynamic_cast<Component*>(_component)->owner = this;
