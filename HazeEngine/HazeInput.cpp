@@ -58,7 +58,9 @@ namespace Haze_Engine
 		else if (_key == GLFW_KEY_ESCAPE)
 			HazeEngine::Instance()->GetVulkanRenderer()->ShutDown();
 		else if (_key == GLFW_KEY_SPACE)
-			camera->WorldPosition(0, 0, 0);
+		{
+			camera->Initialize();
+		}
 	}
 
 	void HazeInput::hzTakeMouseDirectionInput(GLFWwindow* _window, double _mouseX, double _mouseY)

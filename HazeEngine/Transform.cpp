@@ -38,6 +38,7 @@ namespace Haze_Engine
 
 	void Transform::Rotate(vec3 _rotation, bool _isWorld)
 	{
+		if()
 		if (_isWorld)
 			worldRotation += _rotation;
 		else
@@ -55,6 +56,7 @@ namespace Haze_Engine
 	void Transform::Rotate(float _radians, vec3 _aroundAxis)
 	{
 		rotationMatrix = glm::rotate(rotationMatrix, _radians, _aroundAxis);
+		isDirty = true;
 	}
 
 	void Transform::Scale(vec3 _scale)
@@ -81,9 +83,8 @@ namespace Haze_Engine
 	{
 		if(isDirty)
 		{
-			rotationMatrix = glm::rotate(rotationMatrix, worldRotation.x, WORLD_UP);
-			rotationMatrix = glm::rotate(rotationMatrix, worldRotation.y, WORLD_RIGHT);
-			rotationMatrix = glm::rotate(rotationMatrix, worldRotation.z, WORLD_FORWARD);
+			CalculateAxis();
+			isDirty = false;
 		}
 
 		return rotationMatrix;

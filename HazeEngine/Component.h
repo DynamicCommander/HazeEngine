@@ -23,7 +23,7 @@ bool childclass::isClassType(const std::size_t classType) const							\
 {																						\
 		if (classType == childclass::Type)                                              \
 			return true;                                                                \
-			return parentclass::isClassType(classType);                                 \
+		return parentclass::isClassType(classType);										\
 }																						\
 
 	class Entity;

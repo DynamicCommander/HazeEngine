@@ -90,6 +90,7 @@ namespace Haze_Engine
 		int							framesPerSecond = 0;													//Frames that happen every second of application run time
 		float						fpsTimer = 0.0f;														//Timer that controls when the fps counter resets
 		float						deltaTime = 0.0f;														//Difference in time between update frames.
+		float						totalElapsedTime = 0.0f;												//Total time elapsed while Engine is running
 		////////////////////////////////////////HAZE ENGINE MEMBERS//////////////////////////////////////////
 
 
