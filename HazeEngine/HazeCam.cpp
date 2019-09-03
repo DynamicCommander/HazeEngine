@@ -79,7 +79,7 @@ namespace Haze_Engine
 
 		Haze_Functions_STD::clamp(pitch, -89.0f, 89.0f);
 
-		Rotate(pitch * deltaTime, GetRight());
+		//Rotate(pitch * deltaTime, GetRight());
 
 		yaw = pitch = roll = 0.0f;
 	}
