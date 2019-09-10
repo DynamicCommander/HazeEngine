@@ -84,6 +84,7 @@ namespace Haze_Engine
 		if(isDirty)
 		{
 			CalculateAxis();
+			//TODO Calculate rotation Matrix using world rotation
 			isDirty = false;
 		}
 
