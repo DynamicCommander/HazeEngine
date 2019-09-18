@@ -1260,6 +1260,8 @@ namespace Vulkan_Renderer
 		glfwInit();
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API); //Create Window without OpenGL context
 		glfwVidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+		vkWindowHeight = glfwVidMode->height;
+		vkWindowWidth = glfwVidMode->width;
 		glfwWindow = glfwCreateWindow(glfwVidMode->width, glfwVidMode->height, "Vulkan Renderer Window", nullptr, nullptr);
 
 		glfwSetWindowUserPointer(glfwWindow, this);

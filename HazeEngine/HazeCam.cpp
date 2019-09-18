@@ -73,19 +73,11 @@ namespace Haze_Engine
 	void HazeCam::YawPitchRoll(float _yawRadians, float _pitchRadians, float _rollRadians)
 	{
 		float deltaTime = HazeEngine::Instance()->DeltaTime();
-		yaw += _yawRadians;
-		pitch += _pitchRadians;
-		roll += _rollRadians;
 
-		Haze_Functions_STD::clamp(pitch, -89.0f, 89.0f);
-		Transform* t = HazeEngine::Instance()->GetEntityManager()->FindEntity(1)->GetComponent<Transform>();
-		t->Rotate(yaw, t->GetUp());
-		t->Rotate(pitch, t->GetRight());
-		//worldRotation.y += yaw;
-		//worldRotation.x += pitch;
-		//worldRotation.x = Haze_Functions_STD::clamp(pitch, glm::radians(90.0f), glm::radians(270.0f)); //std::clamp(pitch, Maths::Radians(90.0f), Maths::Radians(270.0f));
+		Haze_Functions_STD::clamp(_pitchRadians, -89.0f, 89.0f);
 
-		Haze_Functions_STD::console(worldRotation);
+		this->Rotate(_yawRadians * deltaTime * .01f, this->GetUp());
+		this->Rotate(_pitchRadians * deltaTime * .01f, this->GetRight());
 	}
 
 	void HazeCam::SetPerspective()

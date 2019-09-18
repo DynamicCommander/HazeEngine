@@ -66,6 +66,8 @@ namespace Vulkan_Renderer
 		void						Render();																		//Vulkan Render, renders all buffers to window
 
 		float						GetAspectRatio();																//Calculates Aspect Ratio
+		float						GetWindowHeight() { return vkWindowHeight; }									//Width of Window
+		float						GetWindowWidth() { return vkWindowWidth; }										//Height of Window
 
 		void						SetVkRebuildBuffers(bool _vkRebuildBuffers) { vkRebuildBuffers = _vkRebuildBuffers; }//Set Rebuild Buffers
 		bool						GetVkRebuildBuffers() { return vkRebuildBuffers; }
@@ -175,6 +177,8 @@ namespace Vulkan_Renderer
 
 		////////////////////////////////////////OPENGL MEMBERS AND FUNCTIONS////////////////////////////////////////
 		GLFWwindow*					glfwWindow;																		//OpenGL window management
+		float						vkWindowHeight;
+		float						vkWindowWidth;
 		const GLFWvidmode*			glfwVidMode;																	//OpenGL Video Mode
 
 		void						CreateGlfwWindow();																//Creates OGL window

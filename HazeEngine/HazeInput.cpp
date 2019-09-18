@@ -25,7 +25,7 @@ namespace Haze_Engine
 
 	void HazeInput::Initialize()
 	{
-
+		oldMousePosition = vec2(0, 0);
 	}
 
 	void HazeInput::Update(float _deltaTime)
@@ -65,18 +65,11 @@ namespace Haze_Engine
 
 	void HazeInput::hzTakeMouseDirectionInput(GLFWwindow* _window, double _mouseX, double _mouseY)
 	{
-		if (bufferFirstMouse)
-		{
-			oldMousePosition.x = _mouseX;
-			oldMousePosition.y = _mouseY;
-			bufferFirstMouse = false;
-		}
+		float xoffset = _mouseX - HazeEngine::Instance()->GetVulkanRenderer()->GetWindowWidth() / 2;
+		float yoffset = HazeEngine::Instance()->GetVulkanRenderer()->GetWindowHeight() / 2 - _mouseY;
 
-		float xoffset = _mouseX - oldMousePosition.x;
-		float yoffset = oldMousePosition.y - _mouseY;
-
-		oldMousePosition = vec2(xoffset, yoffset);
-		glfwSetCursorPos(_window, 0, 0);
+		Haze_Functions_STD::console(xoffset);
+		Haze_Functions_STD::console(yoffset);
 
 		HazeEngine::Instance()->GetEntityManager()->FindEntityByType<HazeCam>()->GetComponent<HazeCam>()->YawPitchRoll(xoffset * mouseXSensitivity, -yoffset * mouseYSensitivity, 0.0f);
 	}
