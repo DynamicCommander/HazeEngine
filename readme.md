@@ -24,9 +24,3 @@
      - This also covers setting up Visual Studio for GLM and GLFW 
      - Make sure to download both parts of GLFW [<b>[http://www.glfw.org/]</b>](http://www.glfw.org/) and [<b>[http://www.glfw.org/download.html]</b>](http://www.glfw.org/download.html), place ```glfw-3.2.1.bin.WIN32``` inside of the ```glfw-3.2.1``` folder
 1. ```F5``` to compile.
-
-#### Known Issues:
-
-1. My camera code is janky as fuck. I'm not sure why it isn't working properly.
-2. I'm in the process of writing the Transform component, the HazeCam component will be rewritten to use the Transform instead of storing it's own positions
-3. There are a ton of warnings in the Vulkan code, I'm going to take the time at some point to clear those up.
